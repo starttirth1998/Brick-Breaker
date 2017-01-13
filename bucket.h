@@ -18,3 +18,5 @@ void createBucket ();
 extern VAO *bucket[2];
 extern vector<struct VAO *> BLOCKS;
 extern vector<float> block_color;
+
+extern VAO *bucket_line;

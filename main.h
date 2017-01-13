@@ -65,4 +65,7 @@ float red_bucket_translation_x = -2.5f;
 float green_bucket_translation_x = 2.5f;
 float red_bucket_translation_incr = 0;
 float green_bucket_translation_incr = 0;
+float rectangle_translation_incr = 0.01;
 
+
+VAO *bucket_line;

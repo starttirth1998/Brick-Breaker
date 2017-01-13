@@ -47,9 +47,10 @@ void draw ()
   // Load identity to model matrix
   
 
-  /*Falling Block Code*/
 
-  float rectangle_translation_incr = 0.01;
+  /* -------------------------------- FALLING BLOCK CODE STARTS HERE ----------------------------------*/
+
+
   // draw3DObject draws the VAO given to it using current MVP matrix
   //cout << "Block Size" << BLOCKS.size() << endl;
   for(int i=0;i<BLOCKS.size();i++)
@@ -66,11 +67,12 @@ void draw ()
     rectangle_translation_y[i] = rectangle_translation_y[i] - rectangle_translation_incr;
   }
 
+  /*-------------------------------------- FALLING BLOCK ENDS HERE -----------------------------------*/
 
-  /*Bucket Code starts here*/
+  /*------------------------------------ BUCKET CODE STARTS HERE ------------------------------------*/
 
   Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, -3, 0));        // glTranslatef
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, -3.5, 0));        // glTranslatef
     glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
     Matrices.model *= (translateRectangle * rotateRectangle);
     MVP = VP * Matrices.model;
@@ -78,7 +80,7 @@ void draw ()
   draw3DObject(bucket[0]);
 
   Matrices.model = glm::mat4(1.0f);
-    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, -3, 0));        // glTranslatef
+    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, -3.5, 0));        // glTranslatef
     rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
     Matrices.model *= (translateRectangle * rotateRectangle);
     MVP = VP * Matrices.model;
@@ -88,9 +90,24 @@ void draw ()
   
   red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
   green_bucket_translation_x = green_bucket_translation_x + green_bucket_translation_incr;
+
+  /* ---------------------------------------- BUCKET CODE ENDS HERE ------------------------------------*/
+
   //camera_rotation_angle++; // Simulating camera rotation
   //rectangle_rotation = rectangle_rotation + increments*rectangle_rot_dir*rectangle_rot_status;
   //rectangle_translation = rectangle_translation - rectangle_translation_incr;
+
+  /* ----------------------------------------- LINE ABOVE BUCKET CODE STARTS HERE -------------------------*/
+
+  Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(0, -3, 0));        // glTranslatef
+    rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle * rotateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+  draw3DObject(bucket_line);
+
+   /* ----------------------------------------- LINE ABOVE BUCKET CODE ENDS HERE -------------------------*/
 }
 
 int main (int argc, char** argv)
@@ -116,7 +133,7 @@ int main (int argc, char** argv)
         glfwPollEvents();
 
 
-        /*Falling Blocks In if condition*/
+        /* FALLING BLOCK RENDERING CODE STARTS HERE */
 
         // Control based on time (Time based transformation like 5 degrees rotation every 0.5s)
         current_time = glfwGetTime(); // Time in seconds
@@ -134,8 +151,10 @@ int main (int argc, char** argv)
             //cout << BLOCKS.size()-1 << endl;
             last_update_time = current_time;
         }
+
+        /* FALLING BLOCK RENDERING CODE ENDS HERE */
     }
 
     glfwTerminate();
-//    exit(EXIT_SUCCESS);
+    //    exit(EXIT_SUCCESS);
 }
