@@ -47,8 +47,6 @@ void createRectangle ();
 
 vector<struct VAO *> BLOCKS;
 
-extern long long NUM_BLOCKS;
-
 extern struct VAO *rectangle;
 
 extern float rectangle_rot_dir;
@@ -61,4 +59,10 @@ extern float rectangle_rotation;
 extern vector<float> rectangle_translation_y;
 extern vector<float> rectangle_translation_x;
 extern vector<float> block_color;
+
+VAO *bucket[2];
+float red_bucket_translation_x = -2.5f;
+float green_bucket_translation_x = 2.5f;
+float red_bucket_translation_incr = 0;
+float green_bucket_translation_incr = 0;
 

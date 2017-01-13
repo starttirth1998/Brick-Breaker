@@ -47,6 +47,7 @@ void draw ()
   // Load identity to model matrix
   
 
+  /*Falling Block Code*/
 
   float rectangle_translation_incr = 0.01;
   // draw3DObject draws the VAO given to it using current MVP matrix
@@ -65,13 +66,30 @@ void draw ()
     rectangle_translation_y[i] = rectangle_translation_y[i] - rectangle_translation_incr;
   }
 
-  
-  // Increment angles
-  float increments = 1;
-  
 
+  /*Bucket Code starts here*/
+
+  Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, -3, 0));        // glTranslatef
+    glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle * rotateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+  draw3DObject(bucket[0]);
+
+  Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, -3, 0));        // glTranslatef
+    rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle * rotateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+  draw3DObject(bucket[1]);
+
+  
+  red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
+  green_bucket_translation_x = green_bucket_translation_x + green_bucket_translation_incr;
   //camera_rotation_angle++; // Simulating camera rotation
-  rectangle_rotation = rectangle_rotation + increments*rectangle_rot_dir*rectangle_rot_status;
+  //rectangle_rotation = rectangle_rotation + increments*rectangle_rot_dir*rectangle_rot_status;
   //rectangle_translation = rectangle_translation - rectangle_translation_incr;
 }
 
@@ -96,6 +114,9 @@ int main (int argc, char** argv)
 
         // Poll for Keyboard and mouse events
         glfwPollEvents();
+
+
+        /*Falling Blocks In if condition*/
 
         // Control based on time (Time based transformation like 5 degrees rotation every 0.5s)
         current_time = glfwGetTime(); // Time in seconds

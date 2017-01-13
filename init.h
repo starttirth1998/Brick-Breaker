@@ -16,6 +16,7 @@ GLFWwindow* initGLFW (int width, int height);
 void initGL (GLFWwindow* window, int width, int height);
 
 void createRectangle ();
+void createBucket ();
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
@@ -23,8 +24,6 @@ struct GLMatrices Matrices;
 
 GLuint programID;
 struct VAO *rectangle;
-
-long long NUM_BLOCKS = 0;
 
 float rectangle_rot_dir = 1;
 bool rectangle_rot_status = false;
@@ -36,3 +35,7 @@ float rectangle_rotation = 0;
 vector<float> rectangle_translation_y;
 vector<float> rectangle_translation_x;
 vector<float> block_color;
+
+extern float red_bucket_translation_incr;
+extern float green_bucket_translation_incr;
+

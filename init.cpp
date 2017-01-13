@@ -9,6 +9,24 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
 
     if (action == GLFW_RELEASE) {
         switch (key) {
+            /*case GLFW_KEY_LEFT_CONTROL || GLFW_KEY_RIGHT_CONTROL:
+                red_flag = 0;*/
+            case GLFW_KEY_LEFT_CONTROL:
+                if(red_bucket_translation_incr < 0.0f)
+                    red_bucket_translation_incr = 0.0f;
+                break;
+            case GLFW_KEY_RIGHT_CONTROL:
+                if(red_bucket_translation_incr > 0.0f)
+                    red_bucket_translation_incr = 0.0f;
+                break;
+            case GLFW_KEY_LEFT_ALT:
+                if(green_bucket_translation_incr < 0.0f)
+                    green_bucket_translation_incr = 0.0f;
+                break;
+            case GLFW_KEY_RIGHT_ALT:
+                if(green_bucket_translation_incr > 0.0f)
+                    green_bucket_translation_incr = 0.0f;
+                break;
             case GLFW_KEY_X:
                 // do something ..
                 break;
@@ -18,6 +36,18 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
     }
     else if (action == GLFW_PRESS) {
         switch (key) {
+            case GLFW_KEY_LEFT_CONTROL:
+                red_bucket_translation_incr = -0.05f;
+                break;
+            case GLFW_KEY_RIGHT_CONTROL:
+                red_bucket_translation_incr = 0.05f;
+                break;
+            case GLFW_KEY_LEFT_ALT:
+                green_bucket_translation_incr = -0.05f;
+                break;
+            case GLFW_KEY_RIGHT_ALT:
+                green_bucket_translation_incr = 0.05f;
+                break;
             case GLFW_KEY_ESCAPE:
                 quit(window);
                 break;
@@ -150,6 +180,7 @@ void initGL (GLFWwindow* window, int width, int height)
 	// Create the models
     // Generate the VAO, VBOs, vertices data & copy into the array buffer
 	createRectangle ();
+    createBucket ();
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "Sample_GL.vert", "Sample_GL.frag" );
