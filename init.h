@@ -17,6 +17,8 @@ void initGL (GLFWwindow* window, int width, int height);
 
 void createRectangle ();
 void createBucket ();
+void createCannon ();
+void createCannonGun();
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
@@ -39,3 +41,4 @@ vector<float> block_color;
 extern float red_bucket_translation_incr;
 extern float green_bucket_translation_incr;
 
+extern float CANNON_CORD_SPEED;

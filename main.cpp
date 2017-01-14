@@ -99,15 +99,39 @@ void draw ()
 
   /* ----------------------------------------- LINE ABOVE BUCKET CODE STARTS HERE -------------------------*/
 
-  Matrices.model = glm::mat4(1.0f);
+    Matrices.model = glm::mat4(1.0f);
     translateRectangle = glm::translate (glm::vec3(0, -3, 0));        // glTranslatef
     rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
     Matrices.model *= (translateRectangle * rotateRectangle);
     MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-  draw3DObject(bucket_line);
+    draw3DObject(bucket_line);
 
    /* ----------------------------------------- LINE ABOVE BUCKET CODE ENDS HERE -------------------------*/
+
+
+   /* ----------------------------------------- CANNON CODE STARTS HERE ----------------------------------*/
+    for(int i=0;i<180;i++)
+    {
+        //CANNON.push_back(new VAO());
+        Matrices.model = glm::mat4(1.0f);
+        translateRectangle = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
+        rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateRectangle * rotateRectangle);
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(CANNON[i]);
+    }
+
+    Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(CANNON_CORD_X,CANNON_CORD_Y , 0));        // glTranslatef
+    rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle * rotateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(CANNON_GUN);
+    CANNON_CORD_Y = CANNON_CORD_Y + CANNON_CORD_SPEED;
+  /* ------------------------------------------ CANNON CODE ENDS HERE -----------------------------------*/
 }
 
 int main (int argc, char** argv)
@@ -117,6 +141,10 @@ int main (int argc, char** argv)
 
     GLFWwindow* window = initGLFW(width, height);
 
+    for(int i=0;i<180;i++)
+    {
+        CANNON.push_back(new VAO());
+    }
 	initGL (window, width, height);
 
     double last_update_time = glfwGetTime(), current_time;
@@ -137,7 +165,7 @@ int main (int argc, char** argv)
 
         // Control based on time (Time based transformation like 5 degrees rotation every 0.5s)
         current_time = glfwGetTime(); // Time in seconds
-        if ((current_time - last_update_time) >= 1.0) { // atleast 0.5s elapsed since last frame
+        if ((current_time - last_update_time) >= 1.0) { // atleast 1.0s elapsed since last frame
             // do something every 0.5 seconds ..
             BLOCKS.push_back(new VAO());
             float temp_y = 4.0f;

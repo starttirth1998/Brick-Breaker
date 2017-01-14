@@ -27,6 +27,14 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 if(green_bucket_translation_incr > 0.0f)
                     green_bucket_translation_incr = 0.0f;
                 break;
+            case GLFW_KEY_S:
+                if(CANNON_CORD_SPEED > 0.0f)
+                    CANNON_CORD_SPEED = 0.0f;
+                break;
+            case GLFW_KEY_F:
+                if(CANNON_CORD_SPEED < 0.0f)
+                    CANNON_CORD_SPEED = 0.0f;
+                break;
             case GLFW_KEY_X:
                 // do something ..
                 break;
@@ -47,6 +55,12 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 break;
             case GLFW_KEY_RIGHT_ALT:
                 green_bucket_translation_incr = 0.05f;
+                break;
+            case GLFW_KEY_S:
+                CANNON_CORD_SPEED = 0.05f;
+                break;
+            case GLFW_KEY_F:
+                CANNON_CORD_SPEED = -0.05f;
                 break;
             case GLFW_KEY_ESCAPE:
                 quit(window);
@@ -181,6 +195,8 @@ void initGL (GLFWwindow* window, int width, int height)
     // Generate the VAO, VBOs, vertices data & copy into the array buffer
 	createRectangle ();
     createBucket ();
+    createCannon ();
+    createCannonGun();
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "Sample_GL.vert", "Sample_GL.frag" );
@@ -191,7 +207,7 @@ void initGL (GLFWwindow* window, int width, int height)
 	reshapeWindow (window, width, height);
 
     // Background color of the scene
-	glClearColor (0.3f, 0.3f, 0.3f, 0.0f); // R, G, B, A
+	glClearColor (1.0f, 1.0f, 1.0f, 0.0f); // R, G, B, A
 	glClearDepth (1.0f);
 
 	glEnable (GL_DEPTH_TEST);
