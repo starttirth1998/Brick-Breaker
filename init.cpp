@@ -35,6 +35,16 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 if(CANNON_CORD_SPEED < 0.0f)
                     CANNON_CORD_SPEED = 0.0f;
                 break;
+            case GLFW_KEY_A:
+                if(cannon_rotation_dir > 0)
+                    cannon_rotation_dir = 0;
+                    cannon_rotation_increment = 0;
+                break;
+            case GLFW_KEY_D:
+                if(cannon_rotation_dir < 0)
+                    cannon_rotation_dir = 0;
+                    cannon_rotation_increment = 0;
+                break;
             case GLFW_KEY_X:
                 // do something ..
                 break;
@@ -61,6 +71,14 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 break;
             case GLFW_KEY_F:
                 CANNON_CORD_SPEED = -0.05f;
+                break;
+            case GLFW_KEY_A:
+                cannon_rotation_dir = 1;
+                cannon_rotation_increment = 1;
+                break;
+            case GLFW_KEY_D:
+                cannon_rotation_dir = -1;
+                cannon_rotation_increment = 1;
                 break;
             case GLFW_KEY_ESCAPE:
                 quit(window);

@@ -78,3 +78,6 @@ float CANNON_CORD_Y = 0.0f;
 VAO *CANNON_GUN;
 
 float CANNON_CORD_SPEED = 0.0f;
+float cannon_rotation = 0;
+float cannon_rotation_increment = 0;
+float cannon_rotation_dir = 1;

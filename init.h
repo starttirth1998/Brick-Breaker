@@ -42,3 +42,5 @@ extern float red_bucket_translation_incr;
 extern float green_bucket_translation_incr;
 
 extern float CANNON_CORD_SPEED;
+extern float cannon_rotation_dir;
+extern float cannon_rotation_increment;
