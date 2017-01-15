@@ -76,6 +76,14 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 cannon_rotation_dir = 1;
                 cannon_rotation_increment = 1;
                 break;
+            case GLFW_KEY_SPACE:
+                BULLET.push_back(new VAO());
+                BULLET_REVERSE.push_back(new VAO());
+                BULLET_CORD_X.push_back(CANNON_CORD_X+cos(cannon_rotation*M_PI/180));
+                BULLET_CORD_Y.push_back(CANNON_CORD_Y+sin(cannon_rotation*M_PI/180));
+                BULLET_XCORD_SPEED.push_back(BULLET_SPEED*cos(cannon_rotation*M_PI/180));
+                BULLET_YCORD_SPEED.push_back(BULLET_SPEED*sin(cannon_rotation*M_PI/180));
+                break;
             case GLFW_KEY_D:
                 cannon_rotation_dir = -1;
                 cannon_rotation_increment = 1;
@@ -215,7 +223,7 @@ void initGL (GLFWwindow* window, int width, int height)
     createBucket ();
     createCannon ();
     createCannonGun();
-    createBullet();
+    //createBullet();
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "Sample_GL.vert", "Sample_GL.frag" );

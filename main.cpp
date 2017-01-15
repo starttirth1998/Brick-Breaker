@@ -142,16 +142,23 @@ void draw ()
 
 
   /* ----------------------------------------- BULLET CODE STARTS HERE -----------------------------------*/
-  for(int i=0;i<10;i++)
+  if(!BULLET.empty())
   {
-    Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateBullet = glm::translate (glm::vec3(CANNON_CORD_X+1.5f, 0, 0));        // glTranslatef
-    glm::mat4 rotateBullet = glm::rotate((float)(cannon_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateBullet*rotateBullet );
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(BULLET[i]);
-    draw3DObject(BULLET_REVERSE[i]);    
+    createBullet();
+    for(int i=0;i<BULLET.size();i++)
+    {
+        Matrices.model = glm::mat4(1.0f);
+        glm::mat4 translateBullet = glm::translate (glm::vec3(BULLET_CORD_X[i], BULLET_CORD_Y[i], 0));        // glTranslatef
+        glm::mat4 rotateBullet = glm::rotate((float)(bullet_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateBullet*rotateBullet );
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(BULLET[i]);
+        draw3DObject(BULLET_REVERSE[i]);
+        BULLET_CORD_X[i] = BULLET_CORD_X[i] + BULLET_XCORD_SPEED[i];
+        BULLET_CORD_Y[i] = BULLET_CORD_Y[i] + BULLET_YCORD_SPEED[i];
+        bullet_rotation = bullet_rotation + bullet_rotation_increment*bullet_rotation_dir;
+    }
   }
     /* ----------------------------------------- BULLET CODE ENDS HERE ------------------------------------*/
 
@@ -167,11 +174,6 @@ int main (int argc, char** argv)
     for(int i=0;i<180;i++)
     {
         CANNON.push_back(new VAO());
-    }
-    for(int i=0;i<180;i++)
-    {
-        BULLET.push_back(new VAO());
-        BULLET_REVERSE.push_back(new VAO());
     }
 	initGL (window, width, height);
 

@@ -1,3 +1,14 @@
+struct VAO {
+    GLuint VertexArrayID;
+    GLuint VertexBuffer;
+    GLuint ColorBuffer;
+
+    GLenum PrimitiveMode;
+    GLenum FillMode;
+    int NumVertices;
+};
+typedef struct VAO VAO;
+
 struct GLMatrices {
 	glm::mat4 projection;
 	glm::mat4 model;
@@ -46,3 +57,14 @@ extern float green_bucket_translation_incr;
 extern float CANNON_CORD_SPEED;
 extern float cannon_rotation_dir;
 extern float cannon_rotation_increment;
+extern float CANNON_CORD_X;
+extern float CANNON_CORD_Y;
+extern float cannon_rotation;
+
+extern vector<VAO *> BULLET;
+extern vector<VAO *> BULLET_REVERSE;
+extern vector<float> BULLET_CORD_X;
+extern vector<float> BULLET_CORD_Y;
+extern vector<float> BULLET_XCORD_SPEED;
+extern vector<float> BULLET_YCORD_SPEED;
+extern float BULLET_SPEED;

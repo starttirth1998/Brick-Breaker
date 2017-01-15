@@ -44,6 +44,7 @@ struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloa
 void draw3DObject (struct VAO* vao);
 
 void createRectangle ();
+void createBullet ();
 
 vector<struct VAO *> BLOCKS;
 
@@ -76,11 +77,19 @@ float CANNON_CORD_Y = 0.0f;
 VAO *CANNON_GUN;
 
 float CANNON_CORD_SPEED = 0.0f;
-float cannon_rotation = 0;
+float cannon_rotation = 0.0f;
 float cannon_rotation_increment = 0;
 float cannon_rotation_dir = 1;
 
 
 vector<VAO *> BULLET;
 vector<VAO *> BULLET_REVERSE;
+vector<float> BULLET_CORD_X;
+vector<float> BULLET_CORD_Y;
 float BULLET_RADIUS = 0.075f;
+float bullet_rotation = 0.0f;
+float bullet_rotation_increment = 20.0f;
+float bullet_rotation_dir = 1;
+vector<float> BULLET_XCORD_SPEED;
+vector<float> BULLET_YCORD_SPEED;
+float BULLET_SPEED = 0.07f;
