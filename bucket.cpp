@@ -29,23 +29,23 @@ void createBucket ()
 
   // GL3 accepts only Triangles. Quads are not supported
   static const GLfloat vertex_buffer_data_red [] = {
-    -0.5,-0.35,0, // vertex 1
-    0.5,-0.35,0, // vertex 2
-    0.5, 0.35,0, // vertex 3
+    -0.4,-0.35,0, // vertex 1
+    0.4,-0.35,0, // vertex 2
+    0.8, 0.35,0, // vertex 3
 
-    0.5, 0.35,0, // vertex 3
-    -0.5, 0.35,0, // vertex 4
-    -0.5,-0.35,0  // vertex 1
+    0.8, 0.35,0, // vertex 3
+    -0.8, 0.35,0, // vertex 4
+    -0.4,-0.35,0  // vertex 1
   };
 
   static const GLfloat vertex_buffer_data_green [] = {
-    -0.5,-0.35,0, // vertex 1
-    0.5,-0.35,0, // vertex 2
-    0.5, 0.35,0, // vertex 3
+    -0.4,-0.35,0, // vertex 1
+    0.4,-0.35,0, // vertex 2
+    0.8, 0.35,0, // vertex 3
 
-    0.5, 0.35,0, // vertex 3
-    -0.5, 0.35,0, // vertex 4
-    -0.5,-0.35,0  // vertex 1
+    0.8, 0.35,0, // vertex 3
+    -0.8, 0.35,0, // vertex 4
+    -0.4,-0.35,0  // vertex 1
   };
 
   static const GLfloat color_buffer_data_red [] = {

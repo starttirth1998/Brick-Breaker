@@ -45,6 +45,7 @@ void draw3DObject (struct VAO* vao);
 
 void createRectangle ();
 void createBullet ();
+void collision ();
 
 vector<struct VAO *> BLOCKS;
 
@@ -92,4 +93,4 @@ float bullet_rotation_increment = 20.0f;
 float bullet_rotation_dir = 1;
 vector<float> BULLET_XCORD_SPEED;
 vector<float> BULLET_YCORD_SPEED;
-float BULLET_SPEED = 0.07f;
+float BULLET_SPEED = 0.09f;

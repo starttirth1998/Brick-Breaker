@@ -8,6 +8,38 @@ extern GLuint programID;
  * Customizable functions *
  **************************/
 
+
+void collision()
+{
+    vector< pair<int,int> > DELETE;
+    for(int i=0;i<BULLET.size();i++)
+    {
+        for(int j=0;j<BLOCKS.size();j++)
+        {
+            //cout << "i":i << " " << "j":j << " " << "dist":abs(BULLET_CORD_X[i] - rectangle_translation_x[j])<< "r":BULLET_RADIUS << ;
+            if(abs(BULLET_CORD_X[i] - rectangle_translation_x[j]) < 2*BULLET_RADIUS+0.02f 
+            && abs(BULLET_CORD_Y[i] - rectangle_translation_y[j]) < 2*BULLET_RADIUS+0.02f)
+            {
+                DELETE.push_back({i,j});
+            }
+        }
+    }
+    for(int i=0;i<DELETE.size();i++)
+    {
+        BULLET.erase(BULLET.begin() + DELETE[i].first);
+        BULLET_REVERSE.erase(BULLET_REVERSE.begin() + DELETE[i].first);
+        BULLET_CORD_X.erase(BULLET_CORD_X.begin() + DELETE[i].first);
+        BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i].first);
+        BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i].first);
+        BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i].first);
+        BLOCKS.erase(BLOCKS.begin() + DELETE[i].second);
+        rectangle_translation_x.erase(rectangle_translation_x.begin() + DELETE[i].second);
+        rectangle_translation_y.erase(rectangle_translation_y.begin() + DELETE[i].second);
+        block_color.erase(block_color.begin() + DELETE[i].second);
+    }
+    DELETE.clear();
+}
+
 /* Render the scene with openGL */
 /* Edit this function according to your assignment */
 void draw ()
@@ -47,6 +79,7 @@ void draw ()
   // Load identity to model matrix
   
 
+  collision();
 
   /* -------------------------------- FALLING BLOCK CODE STARTS HERE ----------------------------------*/
 
