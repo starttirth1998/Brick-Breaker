@@ -71,9 +71,7 @@ float rectangle_translation_incr = 0.01;
 VAO *bucket_line;
 vector<VAO *> CANNON;
 float CANNON_RADIUS = 0.50f;
-float CANNON_CENTER_X = -3.0f;
-float CANNON_CENTER_Y = -0.01f;
-float CANNON_CORD_X = -1.05f;
+float CANNON_CORD_X = -4.05f;
 float CANNON_CORD_Y = 0.0f;
 VAO *CANNON_GUN;
 
@@ -81,3 +79,8 @@ float CANNON_CORD_SPEED = 0.0f;
 float cannon_rotation = 0;
 float cannon_rotation_increment = 0;
 float cannon_rotation_dir = 1;
+
+
+vector<VAO *> BULLET;
+vector<VAO *> BULLET_REVERSE;
+float BULLET_RADIUS = 0.075f;

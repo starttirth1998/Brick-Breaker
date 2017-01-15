@@ -19,6 +19,8 @@ void createRectangle ();
 void createBucket ();
 void createCannon ();
 void createCannonGun();
+void createBullet();
+
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 

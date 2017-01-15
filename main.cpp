@@ -123,11 +123,11 @@ void draw ()
     }
 
     Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateCannonGun = glm::translate (glm::vec3(CANNON_CORD_X,CANNON_CORD_Y, 0));        // glTranslatef
-    glm::mat4 translateCannonGunToOrigin = glm::translate (glm::vec3(-CANNON_CENTER_X ,-CANNON_CENTER_Y, 0)); 
+    glm::mat4 translateCannonGun = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
+    //glm::mat4 translateCannonGunToOrigin = glm::translate (glm::vec3(-CANNON_CENTER_X ,-CANNON_CENTER_Y, 0)); 
     glm::mat4 rotateCannonGun = glm::rotate((float)(cannon_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    glm::mat4 translateCannonGunToOriginal = glm::translate (glm::vec3(CANNON_CENTER_X ,CANNON_CENTER_Y, 0));
-    Matrices.model *= (translateCannonGunToOrigin*rotateCannonGun*translateCannonGunToOriginal*translateCannonGun );
+    //glm::mat4 translateCannonGunToOriginal = glm::translate (glm::vec3(CANNON_CENTER_X ,CANNON_CENTER_Y, 0));
+    Matrices.model *= (translateCannonGun*rotateCannonGun );
     MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     draw3DObject(CANNON_GUN);    
@@ -139,11 +139,27 @@ void draw ()
         cannon_rotation = cannon_rotation - cannon_rotation_increment*cannon_rotation_dir;*/
         
   /* ------------------------------------------ CANNON CODE ENDS HERE -----------------------------------*/
+
+
+  /* ----------------------------------------- BULLET CODE STARTS HERE -----------------------------------*/
+  for(int i=0;i<10;i++)
+  {
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateBullet = glm::translate (glm::vec3(CANNON_CORD_X+1.5f, 0, 0));        // glTranslatef
+    glm::mat4 rotateBullet = glm::rotate((float)(cannon_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateBullet*rotateBullet );
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(BULLET[i]);
+    draw3DObject(BULLET_REVERSE[i]);    
+  }
+    /* ----------------------------------------- BULLET CODE ENDS HERE ------------------------------------*/
+
 }
 
 int main (int argc, char** argv)
 {
-	int width = 600;
+	int width = 800;
 	int height = 600;
 
     GLFWwindow* window = initGLFW(width, height);
@@ -151,6 +167,11 @@ int main (int argc, char** argv)
     for(int i=0;i<180;i++)
     {
         CANNON.push_back(new VAO());
+    }
+    for(int i=0;i<180;i++)
+    {
+        BULLET.push_back(new VAO());
+        BULLET_REVERSE.push_back(new VAO());
     }
 	initGL (window, width, height);
 

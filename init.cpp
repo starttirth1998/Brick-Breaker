@@ -215,6 +215,7 @@ void initGL (GLFWwindow* window, int width, int height)
     createBucket ();
     createCannon ();
     createCannonGun();
+    createBullet();
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "Sample_GL.vert", "Sample_GL.frag" );
