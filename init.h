@@ -25,6 +25,7 @@ void mouseButton (GLFWwindow* window, int button, int action, int mods);
 void reshapeWindow (GLFWwindow* window, int width, int height);
 GLFWwindow* initGLFW (int width, int height);
 void initGL (GLFWwindow* window, int width, int height);
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
 void createRectangle ();
 void createBucket ();
@@ -72,3 +73,6 @@ extern vector<float> BULLET_YCORD_SPEED;
 extern float BULLET_SPEED;
 extern vector<int> BULLET_FLAG_1;
 extern vector<int> BULLET_FLAG_2;
+
+extern int width;
+extern int height;

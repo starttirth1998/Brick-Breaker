@@ -6,13 +6,13 @@ void createBucket ()
 {
   /*------------------------------- LINE ABOVE BUCKET STARTS -------------------------- */
   static const GLfloat line_data [] = {
-    -10.0,-0.01,0, // vertex 1
-    10.0,-0.01,0, // vertex 2
-    10.0, 0.01,0, // vertex 3
+    -100.0,-0.01,0, // vertex 1
+    100.0,-0.01,0, // vertex 2
+    100.0, 0.01,0, // vertex 3
 
-    10.0, 0.01,0, // vertex 3
-    10.0, 0.01,0, // vertex 4
-    -10.0,-0.01,0  // vertex 1
+    100.0, 0.01,0, // vertex 3
+    100.0, 0.01,0, // vertex 4
+    -100.0,-0.01,0  // vertex 1
   };
 
   static const GLfloat line_color [] = {

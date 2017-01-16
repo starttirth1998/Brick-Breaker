@@ -117,7 +117,7 @@ float LEFT_LIMIT = -4.0f;
 long long GAME_SCORE = 0;
 long long MISS = 0;
 
-GLfloat zoom = 2.0f;
+GLfloat zoom = 1.0f;
 
 VAO *MIRROR_1;
 VAO *MIRROR_BACK_1;
@@ -127,3 +127,6 @@ float MIRROR_ANGLE_1 = 20;
 VAO *MIRROR_2;
 VAO *MIRROR_BACK_2;
 float MIRROR_ANGLE_2 = 90;
+
+int width = 800;
+int height = 600;

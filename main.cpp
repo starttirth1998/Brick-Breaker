@@ -351,8 +351,8 @@ void mirror_reflect()
             }
         if( BULLET_FLAG_2[i] == 0 &&
             BULLET_CORD_X[i] < 3.0f && BULLET_CORD_X[i] > 2.92f &&         
-            BULLET_CORD_Y[i] >= 2.46f-(MIRROR_LENGTH) &&
-            BULLET_CORD_Y[i] <= 2.54f+(MIRROR_LENGTH) )
+            BULLET_CORD_Y[i] >= 2.42f-(MIRROR_LENGTH) &&
+            BULLET_CORD_Y[i] <= 2.58f+(MIRROR_LENGTH) )
             {
                 BULLET_FLAG_2[i] = 1;
                 BULLET_FLAG_1[i] = 0;
@@ -404,9 +404,6 @@ void draw ()
 
 int main (int argc, char** argv)
 {
-	int width = 800;
-	int height = 600;
-
     GLFWwindow* window = initGLFW(width, height);
 
     for(int i=0;i<180;i++)

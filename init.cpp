@@ -3,12 +3,6 @@
 
 /* Executed when a regular key is pressed/released/held-down */
 /* Prefered for Keyboard events */
-void scroll_callback(GLFWwindow* window, double x, double y)
-{
-    zoom += (float) y / 4.f;
-    if (zoom < 0)
-        zoom = 0;
-}
 
 void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -97,13 +91,15 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 cannon_rotation_dir = -1;
                 cannon_rotation_increment = 1;
                 break;
-            case GLFW_KEY_DOWN:
+            case GLFW_KEY_UP:
                 zoom -= 0.25f;
                 if (zoom < 0.f)
                     zoom = 0.f;
+                reshapeWindow(window,width,height);
                 break;
-            case GLFW_KEY_UP:
+            case GLFW_KEY_DOWN:
                 zoom += 0.25f;
+                reshapeWindow(window,width,height);
                 break;
             case GLFW_KEY_ESCAPE:
                 quit(window);
@@ -165,7 +161,7 @@ void reshapeWindow (GLFWwindow* window, int width, int height)
     // Matrices.projection = glm::perspective (fov, (GLfloat) fbwidth / (GLfloat) fbheight, 0.1f, 500.0f);
 
     // Ortho projection for 2D views
-    Matrices.projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.1f, 500.0f);
+    Matrices.projection = glm::ortho(-4.0f*zoom, 4.0f*zoom, -4.0f*zoom, 4.0f*zoom, 0.1f, 500.0f);
 }
 
 static void error_callback(int error, const char* description)
@@ -176,6 +172,13 @@ static void error_callback(int error, const char* description)
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     cout << xpos << "__" << ypos << endl;
+}
+
+void scroll_callback(GLFWwindow* window, double x, double y)
+{
+    zoom += (float) y / 4.f;
+    if (zoom < 0)
+        zoom = 0;
 }
 
 void quit(GLFWwindow *window)
