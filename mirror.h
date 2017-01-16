@@ -1,4 +1,5 @@
 
+
 struct VAO {
     GLuint VertexArrayID;
     GLuint VertexBuffer;
@@ -14,6 +15,8 @@ struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloa
 struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloat* vertex_buffer_data, const GLfloat red, const GLfloat green, const GLfloat blue, GLenum fill_mode);
 
 void createMirror ();
+void DrawMirror();
 
 extern VAO *MIRROR;
 extern float MIRROR_LENGTH;
+extern VAO *MIRROR_BACK;

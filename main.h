@@ -50,7 +50,11 @@ void collision ();
 void outside_board();
 void score();
 void mirror_reflect();
-
+void DrawMirror();
+void DrawBlocks();
+void DrawBucket();
+void DrawCannon();
+void DrawBullet();
 
 vector<struct VAO *> BLOCKS;
 
@@ -115,5 +119,6 @@ long long MISS = 0;
 GLfloat zoom = 2.0f;
 
 VAO *MIRROR;
+VAO *MIRROR_BACK;
 float MIRROR_LENGTH = 0.6f;
-float MIRROR_ANGLE = 15;
+float MIRROR_ANGLE = 20;

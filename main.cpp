@@ -8,6 +8,192 @@ extern GLuint programID;
  * Customizable functions *
  **************************/
 
+void DrawBullet()
+{
+    glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+    // For each model you render, since the MVP will be different (at least the M part)
+    //  Don't change unless you are sure!!
+    glm::mat4 MVP;	// MVP = Projection * View * Model
+
+    /* ----------------------------------------- BULLET CODE STARTS HERE -----------------------------------*/
+  if(!BULLET.empty())
+  {
+    createBullet();
+    for(int i=0;i<BULLET.size();i++)
+    {
+        Matrices.model = glm::mat4(1.0f);
+        glm::mat4 translateBullet = glm::translate (glm::vec3(BULLET_CORD_X[i], BULLET_CORD_Y[i], 0));        // glTranslatef
+        glm::mat4 rotateBullet = glm::rotate((float)(bullet_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateBullet*rotateBullet );
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(BULLET[i]);
+        draw3DObject(BULLET_REVERSE[i]);
+        BULLET_CORD_X[i] = BULLET_CORD_X[i] + BULLET_XCORD_SPEED[i];
+        BULLET_CORD_Y[i] = BULLET_CORD_Y[i] + BULLET_YCORD_SPEED[i];
+        bullet_rotation = bullet_rotation + bullet_rotation_increment*bullet_rotation_dir;
+    }
+  }
+    /* ----------------------------------------- BULLET CODE ENDS HERE ------------------------------------*/
+}
+
+void DrawCannon()
+{
+    glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+    // For each model you render, since the MVP will be different (at least the M part)
+    //  Don't change unless you are sure!!
+    glm::mat4 MVP;	// MVP = Projection * View * Model
+
+     /* ----------------------------------------- CANNON CODE STARTS HERE ----------------------------------*/
+    for(int i=0;i<180;i++)
+    {
+        //CANNON.push_back(new VAO());
+        Matrices.model = glm::mat4(1.0f);
+        glm::mat4 translateRectangle = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
+        //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateRectangle);
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(CANNON[i]);
+    }
+
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateCannonGun = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
+    //glm::mat4 translateCannonGunToOrigin = glm::translate (glm::vec3(-CANNON_CENTER_X ,-CANNON_CENTER_Y, 0)); 
+    glm::mat4 rotateCannonGun = glm::rotate((float)(cannon_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    //glm::mat4 translateCannonGunToOriginal = glm::translate (glm::vec3(CANNON_CENTER_X ,CANNON_CENTER_Y, 0));
+    Matrices.model *= (translateCannonGun*rotateCannonGun );
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(CANNON_GUN);    
+    CANNON_CORD_Y = CANNON_CORD_Y + CANNON_CORD_SPEED;
+    if(CANNON_CORD_Y > UPPER_LIMIT-1.0f || CANNON_CORD_Y < LOWER_LIMIT+1.5f)
+        CANNON_CORD_Y = CANNON_CORD_Y - CANNON_CORD_SPEED;
+    cannon_rotation = cannon_rotation + cannon_rotation_increment*cannon_rotation_dir;
+    if(cannon_rotation > 80 || cannon_rotation < -80)
+        cannon_rotation = cannon_rotation - cannon_rotation_increment*cannon_rotation_dir;
+        
+  /* ------------------------------------------ CANNON CODE ENDS HERE -----------------------------------*/
+}
+
+void DrawBucket()
+{
+    glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+    // For each model you render, since the MVP will be different (at least the M part)
+    //  Don't change unless you are sure!!
+    glm::mat4 MVP;	// MVP = Projection * View * Model
+
+    /*------------------------------------ BUCKET CODE STARTS HERE ------------------------------------*/
+
+  Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, red_bucket_translation_y, 0));        // glTranslatef
+    Matrices.model *= (translateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+  draw3DObject(bucket[0]);
+
+  Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, green_bucket_translation_y, 0));        // glTranslatef
+    //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+  draw3DObject(bucket[1]);
+
+  
+  red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
+  if(red_bucket_translation_x < LEFT_LIMIT+0.8f || red_bucket_translation_x > RIGHT_LIMIT-0.8f)
+    red_bucket_translation_x = red_bucket_translation_x - red_bucket_translation_incr;
+  green_bucket_translation_x = green_bucket_translation_x + green_bucket_translation_incr;
+  if(green_bucket_translation_x < LEFT_LIMIT+0.8f || green_bucket_translation_x > RIGHT_LIMIT-0.8f)
+    green_bucket_translation_x = green_bucket_translation_x - green_bucket_translation_incr;
+
+  /* ---------------------------------------- BUCKET CODE ENDS HERE ------------------------------------*/
+
+  /* ----------------------------------------- LINE ABOVE BUCKET CODE STARTS HERE -------------------------*/
+
+    Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(0, -3, 0));        // glTranslatef
+    //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(bucket_line);
+
+   /* ----------------------------------------- LINE ABOVE BUCKET CODE ENDS HERE -------------------------*/
+
+}
+
+void DrawMirror()
+{
+    glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+    // For each model you render, since the MVP will be different (at least the M part)
+    //  Don't change unless you are sure!!
+    glm::mat4 MVP;	// MVP = Projection * View * Model
+
+    /* ----------------------------------------- MIRROR CODE STARTS HERE ----------------------------------*/
+
+    
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateMirror = glm::translate (glm::vec3(0, 0, 0));        // glTranslatef
+    glm::mat4 rotateMirror = glm::rotate((float)(MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateMirror*rotateMirror);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(MIRROR);
+
+    for(int i=-1;i<5;i++)
+    {
+        Matrices.model = glm::mat4(1.0f);
+        glm::mat4 translateMirrorBack = glm::translate (glm::vec3(-0.15 + 0.2*i, -0.15 + 0.07*i, 0));        // glTranslatef
+        glm::mat4 rotateMirrorBack = glm::rotate((float)(-MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateMirrorBack*rotateMirrorBack);
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(MIRROR_BACK);
+    }
+
+    /* ----------------------------------------- MIRROR CODE ENDS HERE ---------------------------------------*/
+}
+
+void DrawBlocks()
+{
+     glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    // Send our transformation to the currently bound shader, in the "MVP" uniform
+    // For each model you render, since the MVP will be different (at least the M part)
+    //  Don't change unless you are sure!!
+    glm::mat4 MVP;	// MVP = Projection * View * Model
+    /* -------------------------------- FALLING BLOCK CODE STARTS HERE ----------------------------------*/
+
+
+  // draw3DObject draws the VAO given to it using current MVP matrix
+  //cout << "Block Size" << BLOCKS.size() << endl;
+  for(int i=0;i<BLOCKS.size();i++)
+  {
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(rectangle_translation_x[i], rectangle_translation_y[i], 0.0));        // glTranslatef
+    //glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(BLOCKS[i]);
+    //cout << "draw" << " " << i << endl;
+    //draw3DObject(rectangle);
+    rectangle_translation_y[i] = rectangle_translation_y[i] - rectangle_translation_incr;
+  }
+
+  /*-------------------------------------- FALLING BLOCK ENDS HERE -----------------------------------*/
+}
+
 void score()
 {
     vector<int> DELETE;
@@ -119,22 +305,39 @@ void outside_board()
 
 void mirror_reflect()
 {
+    vector<int> DELETE;
     for(int i=0;i<BULLET.size();i++)
     {
         if( BULLET_FLAG[i] == 0 &&
-            BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i] >= 0.0f &&
+            BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i] > 0.0f &&
             abs( BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i]) < 0.08f &&          
             BULLET_CORD_X[i] > -(MIRROR_LENGTH) &&
             BULLET_CORD_X[i] < (MIRROR_LENGTH) )
             {
                 BULLET_FLAG[i] = 1;
                 float angle = 2*MIRROR_ANGLE*M_PI/180.0f + 2*atan(-BULLET_YCORD_SPEED[i]/BULLET_XCORD_SPEED[i]);
-                cout << angle*180.0f/M_PI << endl;
-                BULLET_XCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*cos(angle)-BULLET_YCORD_SPEED[i]*sin(angle);
-                BULLET_YCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*sin(angle)+BULLET_YCORD_SPEED[i]*cos(angle);
+                //cout << angle*180.0f/M_PI << endl;
+                if(angle*180.0f/M_PI > 0)
+                {
+                    BULLET_XCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*cos(angle)-BULLET_YCORD_SPEED[i]*sin(angle);
+                    BULLET_YCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*sin(angle)+BULLET_YCORD_SPEED[i]*cos(angle);
+                }
+                else
+                    DELETE.push_back(i);
                 //BULLET_YCORD_Y[i] = BULLET_CORD_Y[i]*cos(90*M_PI/180.0f) - BULLET_CORD_Y[i]*sin(90*M_PI/180.0f); 
             }
     }
+    for(int i=0;i<DELETE.size();i++)
+    {
+        BULLET.erase(BULLET.begin() + DELETE[i]);
+        BULLET_REVERSE.erase(BULLET_REVERSE.begin() + DELETE[i]);
+        BULLET_CORD_X.erase(BULLET_CORD_X.begin() + DELETE[i]);
+        BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i]);
+        BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i]);
+        BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i]);
+        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i]);
+    }
+    DELETE.clear();
 }
 
 /* Render the scene with openGL */
@@ -181,136 +384,11 @@ void draw ()
   outside_board();
   mirror_reflect();
 
-  /* -------------------------------- FALLING BLOCK CODE STARTS HERE ----------------------------------*/
-
-
-  // draw3DObject draws the VAO given to it using current MVP matrix
-  //cout << "Block Size" << BLOCKS.size() << endl;
-  for(int i=0;i<BLOCKS.size();i++)
-  {
-    Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateRectangle = glm::translate (glm::vec3(rectangle_translation_x[i], rectangle_translation_y[i], 0.0));        // glTranslatef
-    //glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateRectangle);
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(BLOCKS[i]);
-    //cout << "draw" << " " << i << endl;
-    //draw3DObject(rectangle);
-    rectangle_translation_y[i] = rectangle_translation_y[i] - rectangle_translation_incr;
-  }
-
-  /*-------------------------------------- FALLING BLOCK ENDS HERE -----------------------------------*/
-
-  /*------------------------------------ BUCKET CODE STARTS HERE ------------------------------------*/
-
-  Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, red_bucket_translation_y, 0));        // glTranslatef
-    Matrices.model *= (translateRectangle);
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-  draw3DObject(bucket[0]);
-
-  Matrices.model = glm::mat4(1.0f);
-    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, green_bucket_translation_y, 0));        // glTranslatef
-    //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateRectangle);
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-  draw3DObject(bucket[1]);
-
-  
-  red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
-  if(red_bucket_translation_x < LEFT_LIMIT+0.8f || red_bucket_translation_x > RIGHT_LIMIT-0.8f)
-    red_bucket_translation_x = red_bucket_translation_x - red_bucket_translation_incr;
-  green_bucket_translation_x = green_bucket_translation_x + green_bucket_translation_incr;
-  if(green_bucket_translation_x < LEFT_LIMIT+0.8f || green_bucket_translation_x > RIGHT_LIMIT-0.8f)
-    green_bucket_translation_x = green_bucket_translation_x - green_bucket_translation_incr;
-
-  /* ---------------------------------------- BUCKET CODE ENDS HERE ------------------------------------*/
-
-  //camera_rotation_angle++; // Simulating camera rotation
-  //rectangle_rotation = rectangle_rotation + increments*rectangle_rot_dir*rectangle_rot_status;
-  //rectangle_translation = rectangle_translation - rectangle_translation_incr;
-
-  /* ----------------------------------------- LINE ABOVE BUCKET CODE STARTS HERE -------------------------*/
-
-    Matrices.model = glm::mat4(1.0f);
-    translateRectangle = glm::translate (glm::vec3(0, -3, 0));        // glTranslatef
-    //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateRectangle);
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(bucket_line);
-
-   /* ----------------------------------------- LINE ABOVE BUCKET CODE ENDS HERE -------------------------*/
-
-
-   /* ----------------------------------------- CANNON CODE STARTS HERE ----------------------------------*/
-    for(int i=0;i<180;i++)
-    {
-        //CANNON.push_back(new VAO());
-        Matrices.model = glm::mat4(1.0f);
-        translateRectangle = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
-        //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-        Matrices.model *= (translateRectangle);
-        MVP = VP * Matrices.model;
-        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-        draw3DObject(CANNON[i]);
-    }
-
-    Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateCannonGun = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
-    //glm::mat4 translateCannonGunToOrigin = glm::translate (glm::vec3(-CANNON_CENTER_X ,-CANNON_CENTER_Y, 0)); 
-    glm::mat4 rotateCannonGun = glm::rotate((float)(cannon_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    //glm::mat4 translateCannonGunToOriginal = glm::translate (glm::vec3(CANNON_CENTER_X ,CANNON_CENTER_Y, 0));
-    Matrices.model *= (translateCannonGun*rotateCannonGun );
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(CANNON_GUN);    
-    CANNON_CORD_Y = CANNON_CORD_Y + CANNON_CORD_SPEED;
-    if(CANNON_CORD_Y > UPPER_LIMIT-1.0f || CANNON_CORD_Y < LOWER_LIMIT+1.0f)
-        CANNON_CORD_Y = CANNON_CORD_Y - CANNON_CORD_SPEED;
-    cannon_rotation = cannon_rotation + cannon_rotation_increment*cannon_rotation_dir;
-    if(cannon_rotation > 80 || cannon_rotation < -80)
-        cannon_rotation = cannon_rotation - cannon_rotation_increment*cannon_rotation_dir;
-        
-  /* ------------------------------------------ CANNON CODE ENDS HERE -----------------------------------*/
-
-
-  /* ----------------------------------------- BULLET CODE STARTS HERE -----------------------------------*/
-  if(!BULLET.empty())
-  {
-    createBullet();
-    for(int i=0;i<BULLET.size();i++)
-    {
-        Matrices.model = glm::mat4(1.0f);
-        glm::mat4 translateBullet = glm::translate (glm::vec3(BULLET_CORD_X[i], BULLET_CORD_Y[i], 0));        // glTranslatef
-        glm::mat4 rotateBullet = glm::rotate((float)(bullet_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-        Matrices.model *= (translateBullet*rotateBullet );
-        MVP = VP * Matrices.model;
-        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-        draw3DObject(BULLET[i]);
-        draw3DObject(BULLET_REVERSE[i]);
-        BULLET_CORD_X[i] = BULLET_CORD_X[i] + BULLET_XCORD_SPEED[i];
-        BULLET_CORD_Y[i] = BULLET_CORD_Y[i] + BULLET_YCORD_SPEED[i];
-        bullet_rotation = bullet_rotation + bullet_rotation_increment*bullet_rotation_dir;
-    }
-  }
-    /* ----------------------------------------- BULLET CODE ENDS HERE ------------------------------------*/
-
-
-    /* ----------------------------------------- MIRROR CODE STARTS HERE ----------------------------------*/
-
-    Matrices.model = glm::mat4(1.0f);
-    translateRectangle = glm::translate (glm::vec3(0, 0, 0));        // glTranslatef
-    glm::mat4 rotateRectangle = glm::rotate((float)(MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateRectangle*rotateRectangle);
-    MVP = VP * Matrices.model;
-    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(MIRROR);
-
-    /* ----------------------------------------- MIRROR CODE ENDS HERE ---------------------------------------*/
+  DrawBlocks();
+  DrawBucket();
+  DrawCannon();
+  DrawBullet();
+  DrawMirror();  
 }
 
 int main (int argc, char** argv)
