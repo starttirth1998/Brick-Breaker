@@ -38,6 +38,8 @@ void createMirror ()
   // create3DObject creates and returns a handle to a VAO that can be used later
   //cout << "createRectangle" << BLOCKS.size() << endl; 
 
-  MIRROR = create3DObject(GL_TRIANGLES, 6, line_data, line_color, GL_FILL);
-  MIRROR_BACK =  create3DObject(GL_TRIANGLES, 6, line_back_data, line_color, GL_FILL);
+  MIRROR_1 = create3DObject(GL_TRIANGLES, 6, line_data, line_color, GL_FILL);
+  MIRROR_BACK_1 =  create3DObject(GL_TRIANGLES, 6, line_back_data, line_color, GL_FILL);
+  MIRROR_2 = create3DObject(GL_TRIANGLES, 6, line_data, line_color, GL_FILL);
+  MIRROR_BACK_2 =  create3DObject(GL_TRIANGLES, 6, line_back_data, line_color, GL_FILL);
 }

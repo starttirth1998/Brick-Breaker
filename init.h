@@ -70,4 +70,5 @@ extern vector<float> BULLET_CORD_Y;
 extern vector<float> BULLET_XCORD_SPEED;
 extern vector<float> BULLET_YCORD_SPEED;
 extern float BULLET_SPEED;
-extern vector<int> BULLET_FLAG;
+extern vector<int> BULLET_FLAG_1;
+extern vector<int> BULLET_FLAG_2;

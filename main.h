@@ -105,7 +105,8 @@ float bullet_rotation_dir = 1;
 vector<float> BULLET_XCORD_SPEED;
 vector<float> BULLET_YCORD_SPEED;
 float BULLET_SPEED = 0.09f;
-vector<int> BULLET_FLAG;
+vector<int> BULLET_FLAG_1;
+vector<int> BULLET_FLAG_2;
 
 
 float LOWER_LIMIT = -4.0f;
@@ -118,7 +119,11 @@ long long MISS = 0;
 
 GLfloat zoom = 2.0f;
 
-VAO *MIRROR;
-VAO *MIRROR_BACK;
+VAO *MIRROR_1;
+VAO *MIRROR_BACK_1;
 float MIRROR_LENGTH = 0.6f;
-float MIRROR_ANGLE = 20;
+float MIRROR_ANGLE_1 = 20;
+
+VAO *MIRROR_2;
+VAO *MIRROR_BACK_2;
+float MIRROR_ANGLE_2 = 90;

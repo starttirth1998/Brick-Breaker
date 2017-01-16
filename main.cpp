@@ -133,35 +133,50 @@ void DrawBucket()
 void DrawMirror()
 {
     glm::mat4 VP = Matrices.projection * Matrices.view;
-
-    // Send our transformation to the currently bound shader, in the "MVP" uniform
-    // For each model you render, since the MVP will be different (at least the M part)
-    //  Don't change unless you are sure!!
-    glm::mat4 MVP;	// MVP = Projection * View * Model
+    glm::mat4 MVP;	
 
     /* ----------------------------------------- MIRROR CODE STARTS HERE ----------------------------------*/
 
     
     Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateMirror = glm::translate (glm::vec3(0, 0, 0));        // glTranslatef
-    glm::mat4 rotateMirror = glm::rotate((float)(MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-    Matrices.model *= (translateMirror*rotateMirror);
+    glm::mat4 translateMirror_1 = glm::translate (glm::vec3(0, 0, 0));        // glTranslatef
+    glm::mat4 rotateMirror_1 = glm::rotate((float)(MIRROR_ANGLE_1*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateMirror_1*rotateMirror_1);
     MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(MIRROR);
+    draw3DObject(MIRROR_1);
 
     for(int i=-1;i<5;i++)
     {
         Matrices.model = glm::mat4(1.0f);
-        glm::mat4 translateMirrorBack = glm::translate (glm::vec3(-0.15 + 0.2*i, -0.15 + 0.07*i, 0));        // glTranslatef
-        glm::mat4 rotateMirrorBack = glm::rotate((float)(-MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
-        Matrices.model *= (translateMirrorBack*rotateMirrorBack);
+        glm::mat4 translateMirrorBack_1 = glm::translate (glm::vec3(-0.15 + 0.2*i, -0.15 + 0.07*i, 0));        // glTranslatef
+        glm::mat4 rotateMirrorBack_1 = glm::rotate((float)(-MIRROR_ANGLE_1*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateMirrorBack_1*rotateMirrorBack_1);
         MVP = VP * Matrices.model;
         glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-        draw3DObject(MIRROR_BACK);
+        draw3DObject(MIRROR_BACK_1);
     }
 
     /* ----------------------------------------- MIRROR CODE ENDS HERE ---------------------------------------*/
+
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateMirror_2 = glm::translate (glm::vec3(3.0f, 2.5f, 0));        // glTranslatef
+    glm::mat4 rotateMirror_2 = glm::rotate((float)(MIRROR_ANGLE_2*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateMirror_2*rotateMirror_2);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(MIRROR_2);
+
+    for(int i=-4;i<4;i++)
+    {
+        Matrices.model = glm::mat4(1.0f);
+        glm::mat4 translateMirrorBack_2 = glm::translate (glm::vec3(3.12, 2.5+0.15*i, 0));        // glTranslatef
+        glm::mat4 rotateMirrorBack_2 = glm::rotate((float)(-MIRROR_ANGLE_2*M_PI/360.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+        Matrices.model *= (translateMirrorBack_2*rotateMirrorBack_2);
+        MVP = VP * Matrices.model;
+        glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+        draw3DObject(MIRROR_BACK_2);
+    }
 }
 
 void DrawBlocks()
@@ -201,19 +216,23 @@ void score()
     {      
         if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f && 
             abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f)
-            GAME_SCORE = GAME_SCORE + 0;
-        else if(block_color[i] == 0 && abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f &&
+            {
+                 DELETE.push_back(i);
+            }
+        else if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f &&
                 rectangle_translation_y[i] - red_bucket_translation_y < 0.45f &&
                 rectangle_translation_y[i] - red_bucket_translation_y > 0.40f)
         {
-            GAME_SCORE = GAME_SCORE + 10;            
+            if(block_color[i] == 0 )
+                GAME_SCORE = GAME_SCORE + 10;            
             DELETE.push_back(i);
         }
-        else if(block_color[i] == 1 && abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f &&
+        else if(abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f &&
                 rectangle_translation_y[i] - green_bucket_translation_y < 0.45f &&
                 rectangle_translation_y[i] - green_bucket_translation_y > 0.40f)
         {
-            GAME_SCORE = GAME_SCORE + 10;            
+            if(block_color[i] == 1)
+                GAME_SCORE = GAME_SCORE + 10;            
             DELETE.push_back(i);
         }
         //cout << GAME_SCORE << endl;
@@ -253,7 +272,8 @@ void collision()
         BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i].first);
         BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i].first);
         BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i].first);
-        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i].first);
+        BULLET_FLAG_1.erase(BULLET_FLAG_1.begin() + DELETE[i].first);
+        BULLET_FLAG_2.erase(BULLET_FLAG_2.begin() + DELETE[i].first);
         BLOCKS.erase(BLOCKS.begin() + DELETE[i].second);
         rectangle_translation_x.erase(rectangle_translation_x.begin() + DELETE[i].second);
         rectangle_translation_y.erase(rectangle_translation_y.begin() + DELETE[i].second);
@@ -282,7 +302,8 @@ void outside_board()
         BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i]);
         BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i]);
         BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i]);
-        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i]);
+        BULLET_FLAG_1.erase(BULLET_FLAG_1.begin() + DELETE[i]);
+        BULLET_FLAG_2.erase(BULLET_FLAG_2.begin() + DELETE[i]);
     }
     DELETE.clear();
     for(int i=0;i<BLOCKS.size();i++)
@@ -305,17 +326,19 @@ void outside_board()
 
 void mirror_reflect()
 {
+    /* ------------------------------------- BULLET REFLECTION CODE STARTS HERE -------------------------------*/
     vector<int> DELETE;
     for(int i=0;i<BULLET.size();i++)
     {
-        if( BULLET_FLAG[i] == 0 &&
-            BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i] > 0.0f &&
-            abs( BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i]) < 0.08f &&          
+        if( BULLET_FLAG_1[i] == 0 &&
+            BULLET_CORD_Y[i] - tan(MIRROR_ANGLE_1*M_PI/180.0f)*BULLET_CORD_X[i] > 0.0f &&
+            abs( BULLET_CORD_Y[i] - tan(MIRROR_ANGLE_1*M_PI/180.0f)*BULLET_CORD_X[i]) < 0.08f &&          
             BULLET_CORD_X[i] > -(MIRROR_LENGTH) &&
             BULLET_CORD_X[i] < (MIRROR_LENGTH) )
             {
-                BULLET_FLAG[i] = 1;
-                float angle = 2*MIRROR_ANGLE*M_PI/180.0f + 2*atan(-BULLET_YCORD_SPEED[i]/BULLET_XCORD_SPEED[i]);
+                BULLET_FLAG_1[i] = 1;
+                BULLET_FLAG_2[i] = 0;
+                float angle = 2*MIRROR_ANGLE_1*M_PI/180.0f + 2*atan2(-BULLET_YCORD_SPEED[i],BULLET_XCORD_SPEED[i]);
                 //cout << angle*180.0f/M_PI << endl;
                 if(angle*180.0f/M_PI > 0)
                 {
@@ -326,6 +349,15 @@ void mirror_reflect()
                     DELETE.push_back(i);
                 //BULLET_YCORD_Y[i] = BULLET_CORD_Y[i]*cos(90*M_PI/180.0f) - BULLET_CORD_Y[i]*sin(90*M_PI/180.0f); 
             }
+        if( BULLET_FLAG_2[i] == 0 &&
+            BULLET_CORD_X[i] < 3.0f && BULLET_CORD_X[i] > 2.92f &&         
+            BULLET_CORD_Y[i] >= 2.46f-(MIRROR_LENGTH) &&
+            BULLET_CORD_Y[i] <= 2.54f+(MIRROR_LENGTH) )
+            {
+                BULLET_FLAG_2[i] = 1;
+                BULLET_FLAG_1[i] = 0;
+                BULLET_XCORD_SPEED[i] = -BULLET_XCORD_SPEED[i]; 
+            }
     }
     for(int i=0;i<DELETE.size();i++)
     {
@@ -335,49 +367,28 @@ void mirror_reflect()
         BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i]);
         BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i]);
         BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i]);
-        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i]);
+        BULLET_FLAG_1.erase(BULLET_FLAG_1.begin() + DELETE[i]);
+        BULLET_FLAG_2.erase(BULLET_FLAG_2.begin() + DELETE[i]);
     }
     DELETE.clear();
+    /* ------------------------------------- BULLET REFLECTION CODE ENDS HERE -------------------------------*/
+
 }
 
-/* Render the scene with openGL */
-/* Edit this function according to your assignment */
+
 void draw ()
 {
-  // clear the color and depth in the frame buffer
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // use the loaded shader program
-  // Don't change unless you know what you are doing
   glUseProgram (programID);
 
-  // Eye - Location of camera. Don't change unless you are sure!!
   glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
-  // Target - Where is the camera looking at.  Don't change unless you are sure!!
   glm::vec3 target (0, 0, 0);
-  // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
   glm::vec3 up (0, 1, 0);
+  Matrices.view = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-  // Compute Camera matrix (view)
-  // Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
-  //  Don't change unless you are sure!!
-  Matrices.view = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0)); // Fixed camera for 2D (ortho) in XY plane
-
-  // Compute ViewProject matrix as view/camera might not be changed for this frame (basic scenario)
-  //  Don't change unless you are sure!!
   glm::mat4 VP = Matrices.projection * Matrices.view;
 
-  // Send our transformation to the currently bound shader, in the "MVP" uniform
-  // For each model you render, since the MVP will be different (at least the M part)
-  //  Don't change unless you are sure!!
-  glm::mat4 MVP;	// MVP = Projection * View * Model
-
-  /* Render your scene */
-
-  // Pop matrix to undo transformations till last push matrix instead of recomputing model matrix
-  // glPopMatrix ();  
-  // Load identity to model matrix
-  
+  glm::mat4 MVP;
 
   collision();
   score();
@@ -426,7 +437,6 @@ int main (int argc, char** argv)
             // do something every 0.5 seconds ..
             BLOCKS.push_back(new VAO());
             float temp_y = 4.0f;
-            //float temp_x = -2.0f;
             float temp_x = -2.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/6.0f));
             rectangle_translation_x.push_back(temp_x);
             rectangle_translation_y.push_back(temp_y);

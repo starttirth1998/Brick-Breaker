@@ -90,7 +90,8 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 BULLET_CORD_Y.push_back(CANNON_CORD_Y+sin(cannon_rotation*M_PI/180));
                 BULLET_XCORD_SPEED.push_back(BULLET_SPEED*cos(cannon_rotation*M_PI/180));
                 BULLET_YCORD_SPEED.push_back(BULLET_SPEED*sin(cannon_rotation*M_PI/180));
-                BULLET_FLAG.push_back(0);
+                BULLET_FLAG_1.push_back(0);
+                BULLET_FLAG_2.push_back(0);
                 break;
             case GLFW_KEY_D:
                 cannon_rotation_dir = -1;
@@ -172,6 +173,11 @@ static void error_callback(int error, const char* description)
     fprintf(stderr, "Error: %s\n", description);
 }
 
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    cout << xpos << "__" << ypos << endl;
+}
+
 void quit(GLFWwindow *window)
 {
     glfwDestroyWindow(window);
@@ -214,7 +220,7 @@ GLFWwindow* initGLFW (int width, int height)
      is different from WindowSize */
     glfwSetFramebufferSizeCallback(window, reshapeWindow);
     glfwSetWindowSizeCallback(window, reshapeWindow);
-
+    glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
     /* Register function to handle window close */

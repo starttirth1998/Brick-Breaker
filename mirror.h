@@ -17,6 +17,8 @@ struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloa
 void createMirror ();
 void DrawMirror();
 
-extern VAO *MIRROR;
+extern VAO *MIRROR_1;
 extern float MIRROR_LENGTH;
-extern VAO *MIRROR_BACK;
+extern VAO *MIRROR_BACK_1;
+extern VAO *MIRROR_2;
+extern VAO *MIRROR_BACK_2;
