@@ -6,13 +6,13 @@ void createRectangle ()
 {
   // GL3 accepts only Triangles. Quads are not supported
   static const GLfloat vertex_buffer_data [] = {
-    -0.1,-0.15,0, // vertex 1
-    0.1,-0.15,0, // vertex 2
-    0.1, 0.15,0, // vertex 3
+    -0.15,-0.15,0, // vertex 1
+    0.15,-0.15,0, // vertex 2
+    0.15, 0.15,0, // vertex 3
 
-    0.1, 0.15,0, // vertex 3
-    -0.1, 0.15,0, // vertex 4
-    -0.1,-0.15,0  // vertex 1
+    0.15, 0.15,0, // vertex 3
+    -0.15, 0.15,0, // vertex 4
+    -0.15,-0.15,0  // vertex 1
   };
 
   static const GLfloat color_buffer_data_red [] = {

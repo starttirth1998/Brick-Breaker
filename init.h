@@ -18,7 +18,7 @@ struct GLMatrices {
 
 static void error_callback(int error, const char* description);
 void quit(GLFWwindow *window);
-
+void scroll_callback(GLFWwindow* window, double x, double y);
 void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods);
 void keyboardChar (GLFWwindow* window, unsigned int key);
 void mouseButton (GLFWwindow* window, int button, int action, int mods);
@@ -31,12 +31,14 @@ void createBucket ();
 void createCannon ();
 void createCannonGun();
 void createBullet();
+void createMirror();
 
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
 struct GLMatrices Matrices;
 
+extern GLfloat zoom;
 GLuint programID;
 struct VAO *rectangle;
 
@@ -68,3 +70,4 @@ extern vector<float> BULLET_CORD_Y;
 extern vector<float> BULLET_XCORD_SPEED;
 extern vector<float> BULLET_YCORD_SPEED;
 extern float BULLET_SPEED;
+extern vector<int> BULLET_FLAG;

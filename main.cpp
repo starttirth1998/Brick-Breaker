@@ -8,6 +8,40 @@ extern GLuint programID;
  * Customizable functions *
  **************************/
 
+void score()
+{
+    vector<int> DELETE;
+    for(int i=0;i<BLOCKS.size();i++)
+    {      
+        if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f && 
+            abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f)
+            GAME_SCORE = GAME_SCORE + 0;
+        else if(block_color[i] == 0 && abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f &&
+                rectangle_translation_y[i] - red_bucket_translation_y < 0.45f &&
+                rectangle_translation_y[i] - red_bucket_translation_y > 0.40f)
+        {
+            GAME_SCORE = GAME_SCORE + 10;            
+            DELETE.push_back(i);
+        }
+        else if(block_color[i] == 1 && abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f &&
+                rectangle_translation_y[i] - green_bucket_translation_y < 0.45f &&
+                rectangle_translation_y[i] - green_bucket_translation_y > 0.40f)
+        {
+            GAME_SCORE = GAME_SCORE + 10;            
+            DELETE.push_back(i);
+        }
+        //cout << GAME_SCORE << endl;
+        
+    }
+    for(int i=0;i<DELETE.size();i++)
+    {
+        BLOCKS.erase(BLOCKS.begin() + DELETE[i]);
+        rectangle_translation_x.erase(rectangle_translation_x.begin() + DELETE[i]);
+        rectangle_translation_y.erase(rectangle_translation_y.begin() + DELETE[i]);
+        block_color.erase(block_color.begin() + DELETE[i]);
+    }
+    DELETE.clear();
+}
 
 void collision()
 {
@@ -16,10 +50,11 @@ void collision()
     {
         for(int j=0;j<BLOCKS.size();j++)
         {
-            //cout << "i":i << " " << "j":j << " " << "dist":abs(BULLET_CORD_X[i] - rectangle_translation_x[j])<< "r":BULLET_RADIUS << ;
-            if(abs(BULLET_CORD_X[i] - rectangle_translation_x[j]) < 2*BULLET_RADIUS+0.02f 
-            && abs(BULLET_CORD_Y[i] - rectangle_translation_y[j]) < 2*BULLET_RADIUS+0.02f)
+            if(abs(BULLET_CORD_X[i] - rectangle_translation_x[j]) < 2*BULLET_RADIUS+0.04f 
+            && abs(BULLET_CORD_Y[i] - rectangle_translation_y[j]) < 2*BULLET_RADIUS+0.04f)
             {
+                if(block_color[j] == 2)
+                    GAME_SCORE = GAME_SCORE + 10;
                 DELETE.push_back({i,j});
             }
         }
@@ -32,12 +67,74 @@ void collision()
         BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i].first);
         BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i].first);
         BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i].first);
+        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i].first);
         BLOCKS.erase(BLOCKS.begin() + DELETE[i].second);
         rectangle_translation_x.erase(rectangle_translation_x.begin() + DELETE[i].second);
         rectangle_translation_y.erase(rectangle_translation_y.begin() + DELETE[i].second);
         block_color.erase(block_color.begin() + DELETE[i].second);
     }
     DELETE.clear();
+}
+
+void outside_board()
+{
+    vector<int> DELETE;
+    for(int i=0;i<BULLET.size();i++)
+    {
+        if(BULLET_CORD_X[i] > RIGHT_LIMIT || BULLET_CORD_X[i] < LEFT_LIMIT || 
+            BULLET_CORD_Y[i] < LOWER_LIMIT || BULLET_CORD_Y[i] > UPPER_LIMIT)
+        {
+            GAME_SCORE = GAME_SCORE - 5;
+            DELETE.push_back(i);
+        }
+    }
+    for(int i=0;i<DELETE.size();i++)
+    {
+        BULLET.erase(BULLET.begin() + DELETE[i]);
+        BULLET_REVERSE.erase(BULLET_REVERSE.begin() + DELETE[i]);
+        BULLET_CORD_X.erase(BULLET_CORD_X.begin() + DELETE[i]);
+        BULLET_CORD_Y.erase(BULLET_CORD_Y.begin() + DELETE[i]);
+        BULLET_XCORD_SPEED.erase(BULLET_XCORD_SPEED.begin() + DELETE[i]);
+        BULLET_YCORD_SPEED.erase(BULLET_YCORD_SPEED.begin() + DELETE[i]);
+        BULLET_FLAG.erase(BULLET_FLAG.begin() + DELETE[i]);
+    }
+    DELETE.clear();
+    for(int i=0;i<BLOCKS.size();i++)
+    {      
+        if(rectangle_translation_y[i] < LOWER_LIMIT)
+        {
+            MISS++;
+            DELETE.push_back(i);
+        }
+    }
+    for(int i=0;i<DELETE.size();i++)
+    {
+        BLOCKS.erase(BLOCKS.begin() + DELETE[i]);
+        rectangle_translation_x.erase(rectangle_translation_x.begin() + DELETE[i]);
+        rectangle_translation_y.erase(rectangle_translation_y.begin() + DELETE[i]);
+        block_color.erase(block_color.begin() + DELETE[i]);
+    }
+    DELETE.clear();
+}
+
+void mirror_reflect()
+{
+    for(int i=0;i<BULLET.size();i++)
+    {
+        if( BULLET_FLAG[i] == 0 &&
+            BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i] >= 0.0f &&
+            abs( BULLET_CORD_Y[i] - tan(MIRROR_ANGLE*M_PI/180.0f)*BULLET_CORD_X[i]) < 0.08f &&          
+            BULLET_CORD_X[i] > -(MIRROR_LENGTH) &&
+            BULLET_CORD_X[i] < (MIRROR_LENGTH) )
+            {
+                BULLET_FLAG[i] = 1;
+                float angle = 2*MIRROR_ANGLE*M_PI/180.0f + 2*atan(-BULLET_YCORD_SPEED[i]/BULLET_XCORD_SPEED[i]);
+                cout << angle*180.0f/M_PI << endl;
+                BULLET_XCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*cos(angle)-BULLET_YCORD_SPEED[i]*sin(angle);
+                BULLET_YCORD_SPEED[i] = BULLET_XCORD_SPEED[i]*sin(angle)+BULLET_YCORD_SPEED[i]*cos(angle);
+                //BULLET_YCORD_Y[i] = BULLET_CORD_Y[i]*cos(90*M_PI/180.0f) - BULLET_CORD_Y[i]*sin(90*M_PI/180.0f); 
+            }
+    }
 }
 
 /* Render the scene with openGL */
@@ -80,6 +177,9 @@ void draw ()
   
 
   collision();
+  score();
+  outside_board();
+  mirror_reflect();
 
   /* -------------------------------- FALLING BLOCK CODE STARTS HERE ----------------------------------*/
 
@@ -89,7 +189,7 @@ void draw ()
   for(int i=0;i<BLOCKS.size();i++)
   {
     Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateRectangle = glm::translate (glm::vec3(rectangle_translation_x[i], rectangle_translation_y[i], 0));        // glTranslatef
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(rectangle_translation_x[i], rectangle_translation_y[i], 0.0));        // glTranslatef
     //glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
     Matrices.model *= (translateRectangle);
     MVP = VP * Matrices.model;
@@ -105,14 +205,14 @@ void draw ()
   /*------------------------------------ BUCKET CODE STARTS HERE ------------------------------------*/
 
   Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, -3.5, 0));        // glTranslatef
+    glm::mat4 translateRectangle = glm::translate (glm::vec3(red_bucket_translation_x, red_bucket_translation_y, 0));        // glTranslatef
     Matrices.model *= (translateRectangle);
     MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
   draw3DObject(bucket[0]);
 
   Matrices.model = glm::mat4(1.0f);
-    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, -3.5, 0));        // glTranslatef
+    translateRectangle = glm::translate (glm::vec3(green_bucket_translation_x, green_bucket_translation_y, 0));        // glTranslatef
     //rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
     Matrices.model *= (translateRectangle);
     MVP = VP * Matrices.model;
@@ -121,7 +221,11 @@ void draw ()
 
   
   red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
+  if(red_bucket_translation_x < LEFT_LIMIT+0.8f || red_bucket_translation_x > RIGHT_LIMIT-0.8f)
+    red_bucket_translation_x = red_bucket_translation_x - red_bucket_translation_incr;
   green_bucket_translation_x = green_bucket_translation_x + green_bucket_translation_incr;
+  if(green_bucket_translation_x < LEFT_LIMIT+0.8f || green_bucket_translation_x > RIGHT_LIMIT-0.8f)
+    green_bucket_translation_x = green_bucket_translation_x - green_bucket_translation_incr;
 
   /* ---------------------------------------- BUCKET CODE ENDS HERE ------------------------------------*/
 
@@ -165,11 +269,11 @@ void draw ()
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     draw3DObject(CANNON_GUN);    
     CANNON_CORD_Y = CANNON_CORD_Y + CANNON_CORD_SPEED;
+    if(CANNON_CORD_Y > UPPER_LIMIT-1.0f || CANNON_CORD_Y < LOWER_LIMIT+1.0f)
+        CANNON_CORD_Y = CANNON_CORD_Y - CANNON_CORD_SPEED;
     cannon_rotation = cannon_rotation + cannon_rotation_increment*cannon_rotation_dir;
-    /*if(cannon_rotation < 30 && cannon_rotation > -30)    
-      cannon_rotation = cannon_rotation + cannon_rotation_increment*cannon_rotation_dir;
-      if(cannon_rotation >= 30 || cannon_rotation <= -30)
-        cannon_rotation = cannon_rotation - cannon_rotation_increment*cannon_rotation_dir;*/
+    if(cannon_rotation > 80 || cannon_rotation < -80)
+        cannon_rotation = cannon_rotation - cannon_rotation_increment*cannon_rotation_dir;
         
   /* ------------------------------------------ CANNON CODE ENDS HERE -----------------------------------*/
 
@@ -195,6 +299,18 @@ void draw ()
   }
     /* ----------------------------------------- BULLET CODE ENDS HERE ------------------------------------*/
 
+
+    /* ----------------------------------------- MIRROR CODE STARTS HERE ----------------------------------*/
+
+    Matrices.model = glm::mat4(1.0f);
+    translateRectangle = glm::translate (glm::vec3(0, 0, 0));        // glTranslatef
+    glm::mat4 rotateRectangle = glm::rotate((float)(MIRROR_ANGLE*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateRectangle*rotateRectangle);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(MIRROR);
+
+    /* ----------------------------------------- MIRROR CODE ENDS HERE ---------------------------------------*/
 }
 
 int main (int argc, char** argv)
@@ -219,7 +335,7 @@ int main (int argc, char** argv)
         draw();
         // Swap Frame Buffer in double buffering
         glfwSwapBuffers(window);
-
+        
         // Poll for Keyboard and mouse events
         glfwPollEvents();
 
@@ -233,7 +349,7 @@ int main (int argc, char** argv)
             BLOCKS.push_back(new VAO());
             float temp_y = 4.0f;
             //float temp_x = -2.0f;
-            float temp_x = -2.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/8.0f));
+            float temp_x = -2.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/6.0f));
             rectangle_translation_x.push_back(temp_x);
             rectangle_translation_y.push_back(temp_y);
             block_color.push_back(rand()%3);

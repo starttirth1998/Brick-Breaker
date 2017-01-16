@@ -1,13 +1,16 @@
 all: sample2D
 
-sample2D: main.o VAO.o create_object.o bucket.o cannon.o bullet.o init.o glad.c
-	g++ -o sample2D main.o VAO.o create_object.o init.o cannon.o bullet.o bucket.o glad.c -lGL -lglfw -ldl
+sample2D: main.o VAO.o create_object.o bucket.o cannon.o bullet.o mirror.o init.o glad.c
+	g++ -o sample2D main.o VAO.o create_object.o init.o cannon.o bullet.o bucket.o mirror.o glad.c -lGL -lglfw -ldl
 
 main.o: main.cpp main.h header.h glad.c
 	g++ -c main.cpp glad.c -lGL -lglfw -ldl
 
 VAO.o: VAO.cpp VAO.h header.h glad.c
 	g++ -c VAO.cpp glad.c -lGL -lglfw -ldl
+
+mirror.o: mirror.cpp header.h mirror.h glad.c
+	g++ -c mirror.cpp glad.c -lGL -lglfw -ldl
 
 bullet.o: bullet.cpp header.h bullet.h glad.c
 	g++ -c bullet.cpp glad.c -lGL -lglfw -ldl

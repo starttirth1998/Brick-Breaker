@@ -43,9 +43,14 @@ struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloa
 struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloat* vertex_buffer_data, const GLfloat red, const GLfloat green, const GLfloat blue, GLenum fill_mode);
 void draw3DObject (struct VAO* vao);
 
+
 void createRectangle ();
 void createBullet ();
 void collision ();
+void outside_board();
+void score();
+void mirror_reflect();
+
 
 vector<struct VAO *> BLOCKS;
 
@@ -63,8 +68,10 @@ extern vector<float> rectangle_translation_x;
 extern vector<float> block_color;
 
 VAO *bucket[2];
+float red_bucket_translation_y = -3.5f;
 float red_bucket_translation_x = -2.5f;
 float green_bucket_translation_x = 2.5f;
+float green_bucket_translation_y = -3.5f;
 float red_bucket_translation_incr = 0;
 float green_bucket_translation_incr = 0;
 float rectangle_translation_incr = 0.01;
@@ -94,3 +101,19 @@ float bullet_rotation_dir = 1;
 vector<float> BULLET_XCORD_SPEED;
 vector<float> BULLET_YCORD_SPEED;
 float BULLET_SPEED = 0.09f;
+vector<int> BULLET_FLAG;
+
+
+float LOWER_LIMIT = -4.0f;
+float UPPER_LIMIT = 4.0f;
+float RIGHT_LIMIT = 4.0f;
+float LEFT_LIMIT = -4.0f;
+
+long long GAME_SCORE = 0;
+long long MISS = 0;
+
+GLfloat zoom = 2.0f;
+
+VAO *MIRROR;
+float MIRROR_LENGTH = 0.6f;
+float MIRROR_ANGLE = 15;

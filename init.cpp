@@ -3,6 +3,13 @@
 
 /* Executed when a regular key is pressed/released/held-down */
 /* Prefered for Keyboard events */
+void scroll_callback(GLFWwindow* window, double x, double y)
+{
+    zoom += (float) y / 4.f;
+    if (zoom < 0)
+        zoom = 0;
+}
+
 void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
 {
      // Function is called first on GLFW_PRESS.
@@ -83,10 +90,19 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 BULLET_CORD_Y.push_back(CANNON_CORD_Y+sin(cannon_rotation*M_PI/180));
                 BULLET_XCORD_SPEED.push_back(BULLET_SPEED*cos(cannon_rotation*M_PI/180));
                 BULLET_YCORD_SPEED.push_back(BULLET_SPEED*sin(cannon_rotation*M_PI/180));
+                BULLET_FLAG.push_back(0);
                 break;
             case GLFW_KEY_D:
                 cannon_rotation_dir = -1;
                 cannon_rotation_increment = 1;
+                break;
+            case GLFW_KEY_DOWN:
+                zoom -= 0.25f;
+                if (zoom < 0.f)
+                    zoom = 0.f;
+                break;
+            case GLFW_KEY_UP:
+                zoom += 0.25f;
                 break;
             case GLFW_KEY_ESCAPE:
                 quit(window);
@@ -199,6 +215,8 @@ GLFWwindow* initGLFW (int width, int height)
     glfwSetFramebufferSizeCallback(window, reshapeWindow);
     glfwSetWindowSizeCallback(window, reshapeWindow);
 
+    glfwSetScrollCallback(window, scroll_callback);
+
     /* Register function to handle window close */
     glfwSetWindowCloseCallback(window, quit);
 
@@ -219,11 +237,12 @@ void initGL (GLFWwindow* window, int width, int height)
     /* Objects should be created before any other gl function and shaders */
 	// Create the models
     // Generate the VAO, VBOs, vertices data & copy into the array buffer
+
 	createRectangle ();
     createBucket ();
     createCannon ();
     createCannonGun();
-    //createBullet();
+    createMirror();
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "Sample_GL.vert", "Sample_GL.frag" );
