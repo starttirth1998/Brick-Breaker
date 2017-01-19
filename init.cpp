@@ -4,6 +4,23 @@
 /* Executed when a regular key is pressed/released/held-down */
 /* Prefered for Keyboard events */
 
+void shoot()
+{
+    SHOOT_CURRENT = glfwGetTime();
+    if((SHOOT_CURRENT - SHOOT_LAST) >= 1.0)
+    {
+        SHOOT_LAST = SHOOT_CURRENT;
+        BULLET.push_back(new VAO());
+        BULLET_REVERSE.push_back(new VAO());
+        BULLET_CORD_X.push_back(CANNON_CORD_X+cos(cannon_rotation*M_PI/180));
+        BULLET_CORD_Y.push_back(CANNON_CORD_Y+sin(cannon_rotation*M_PI/180));
+        BULLET_XCORD_SPEED.push_back(BULLET_SPEED*cos(cannon_rotation*M_PI/180));
+        BULLET_YCORD_SPEED.push_back(BULLET_SPEED*sin(cannon_rotation*M_PI/180));
+        BULLET_FLAG_1.push_back(0);
+        BULLET_FLAG_2.push_back(0);
+    }
+}
+
 void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
 {
      // Function is called first on GLFW_PRESS.
@@ -77,15 +94,18 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 cannon_rotation_dir = 1;
                 cannon_rotation_increment = 1;
                 break;
+            case GLFW_KEY_N:
+                rectangle_translation_incr += 0.01f;
+                if(rectangle_translation_incr > 1.0f)
+                    rectangle_translation_incr = 1.0f;
+                break;
+            case GLFW_KEY_M:
+                rectangle_translation_incr -= 0.01f;
+                if(rectangle_translation_incr < 0.01f)
+                    rectangle_translation_incr = 0.01f;
+                break;
             case GLFW_KEY_SPACE:
-                BULLET.push_back(new VAO());
-                BULLET_REVERSE.push_back(new VAO());
-                BULLET_CORD_X.push_back(CANNON_CORD_X+cos(cannon_rotation*M_PI/180));
-                BULLET_CORD_Y.push_back(CANNON_CORD_Y+sin(cannon_rotation*M_PI/180));
-                BULLET_XCORD_SPEED.push_back(BULLET_SPEED*cos(cannon_rotation*M_PI/180));
-                BULLET_YCORD_SPEED.push_back(BULLET_SPEED*sin(cannon_rotation*M_PI/180));
-                BULLET_FLAG_1.push_back(0);
-                BULLET_FLAG_2.push_back(0);
+                shoot();
                 break;
             case GLFW_KEY_D:
                 cannon_rotation_dir = -1;
@@ -100,6 +120,20 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
             case GLFW_KEY_DOWN:
                 zoom += 0.25f;
                 reshapeWindow(window,width,height);
+                break;
+            case GLFW_KEY_RIGHT:
+                if(zoom < 1.00f)
+                {
+                    pan_x += 0.05f;
+                    reshapeWindow(window,width,height);
+                }
+                break;
+            case GLFW_KEY_LEFT:
+                if(zoom < 1.00f)
+                {
+                    pan_x -= 0.05f;
+                    reshapeWindow(window,width,height);
+                }
                 break;
             case GLFW_KEY_ESCAPE:
                 quit(window);
@@ -127,11 +161,45 @@ void keyboardChar (GLFWwindow* window, unsigned int key)
 void mouseButton (GLFWwindow* window, int button, int action, int mods)
 {
     switch (button) {
-        case GLFW_MOUSE_BUTTON_RIGHT:
-            if (action == GLFW_RELEASE) {
+        if (action == GLFW_RELEASE) {
+            case GLFW_MOUSE_BUTTON_RIGHT:
                 rectangle_rot_dir *= -1;
-            }
-            break;
+                break;
+        }
+        if(action == GLFW_PRESS){
+            case GLFW_MOUSE_BUTTON_LEFT:
+                glfwGetCursorPos(window, &posx, &posy);
+                posx -= 400;
+                posy -= 300;
+                posx = posx*4.0/400.0;
+                posy = -posy*4.0/300.0;
+                if(abs(posx - red_bucket_translation_x) <= 0.8 && abs(posy-red_bucket_translation_y) <= 0.35 )
+                {
+                    glfwGetCursorPos(window, &posx, &posy);
+                    posx -= 400;
+                    posy -= 300;
+                    posx = posx*4.0/400.0;
+                    posy = -posy*4.0/300.0;
+                    red_bucket_translation_x = posx;
+                }
+                else if(abs(posx - green_bucket_translation_x) <= 0.8 && abs(posy-green_bucket_translation_y) <= 0.35 )
+                {
+                    glfwGetCursorPos(window, &posx, &posy);
+                    posx -= 400;
+                    posy -= 300;
+                    posx = posx*4.0/400.0;
+                    posy = -posy*4.0/300.0;
+                    green_bucket_translation_x = posx;
+                }
+                else
+                {
+                    cannon_rotation = atan((posy-CANNON_CORD_Y)/(posx-CANNON_CORD_X))*180.0/M_PI;
+                    shoot();
+                }
+                //cout << posx << " Y:" << posy << " ANGLE: " << cannon_rotation << endl;
+                
+                break;
+        }
         default:
             break;
     }
@@ -161,7 +229,7 @@ void reshapeWindow (GLFWwindow* window, int width, int height)
     // Matrices.projection = glm::perspective (fov, (GLfloat) fbwidth / (GLfloat) fbheight, 0.1f, 500.0f);
 
     // Ortho projection for 2D views
-    Matrices.projection = glm::ortho(-4.0f*zoom, 4.0f*zoom, -4.0f*zoom, 4.0f*zoom, 0.1f, 500.0f);
+    Matrices.projection = glm::ortho(-4.0f*zoom + pan_x, 4.0f*zoom + pan_x, -4.0f*zoom + pan_y, 4.0f*zoom + pan_y, 0.1f, 500.0f);
 }
 
 static void error_callback(int error, const char* description)
@@ -171,14 +239,15 @@ static void error_callback(int error, const char* description)
 
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    cout << xpos << "__" << ypos << endl;
+    //cout << xpos << "__" << ypos << endl;
 }
 
 void scroll_callback(GLFWwindow* window, double x, double y)
 {
-    zoom += (float) y / 4.f;
+    zoom += (float) y / 4.0f;
     if (zoom < 0)
         zoom = 0;
+    reshapeWindow(window,width,height);
 }
 
 void quit(GLFWwindow *window)

@@ -217,6 +217,8 @@ void score()
         if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f && 
             abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f)
             {
+                if(block_color[i] == 2)
+                    GAME_FLAG = 1;
                  DELETE.push_back(i);
             }
         else if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f &&
@@ -224,7 +226,9 @@ void score()
                 rectangle_translation_y[i] - red_bucket_translation_y > 0.40f)
         {
             if(block_color[i] == 0 )
-                GAME_SCORE = GAME_SCORE + 10;            
+                GAME_SCORE = GAME_SCORE + 10;
+            if(block_color[i] == 2)
+                GAME_FLAG = 1;            
             DELETE.push_back(i);
         }
         else if(abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f &&
@@ -232,7 +236,9 @@ void score()
                 rectangle_translation_y[i] - green_bucket_translation_y > 0.40f)
         {
             if(block_color[i] == 1)
-                GAME_SCORE = GAME_SCORE + 10;            
+                GAME_SCORE = GAME_SCORE + 10;
+            if(block_color[i] == 2)
+                GAME_FLAG = 1;            
             DELETE.push_back(i);
         }
         //cout << GAME_SCORE << endl;
@@ -260,6 +266,12 @@ void collision()
             {
                 if(block_color[j] == 2)
                     GAME_SCORE = GAME_SCORE + 10;
+                else
+                {
+                    MISS++;
+                    if(MISS >= MAX_MISS)
+                        GAME_FLAG = 1;
+                }
                 DELETE.push_back({i,j});
             }
         }
@@ -310,7 +322,6 @@ void outside_board()
     {      
         if(rectangle_translation_y[i] < LOWER_LIMIT)
         {
-            MISS++;
             DELETE.push_back(i);
         }
     }
@@ -381,7 +392,7 @@ void draw ()
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glUseProgram (programID);
 
-  glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
+  glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f) + pan_x, 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
   glm::vec3 target (0, 0, 0);
   glm::vec3 up (0, 1, 0);
   Matrices.view = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
@@ -417,6 +428,8 @@ int main (int argc, char** argv)
     /* Draw in loop */
     while (!glfwWindowShouldClose(window)) {
 
+        if(GAME_FLAG == 1)
+            break;
         // OpenGL Draw commands
         draw();
         // Swap Frame Buffer in double buffering
@@ -446,7 +459,7 @@ int main (int argc, char** argv)
 
         /* FALLING BLOCK RENDERING CODE ENDS HERE */
     }
-
+    cout << "GAME OVER: " << GAME_SCORE << endl;
     glfwTerminate();
     //    exit(EXIT_SUCCESS);
 }

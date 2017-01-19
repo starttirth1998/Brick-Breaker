@@ -115,7 +115,9 @@ float RIGHT_LIMIT = 4.0f;
 float LEFT_LIMIT = -4.0f;
 
 long long GAME_SCORE = 0;
+int GAME_FLAG = 0;
 long long MISS = 0;
+long long MAX_MISS = 20;
 
 GLfloat zoom = 1.0f;
 
@@ -130,3 +132,8 @@ float MIRROR_ANGLE_2 = 90;
 
 int width = 800;
 int height = 600;
+float pan_x = 0.0f;
+float pan_y = 0.0f;
+
+double posx = 0.0f;
+double posy = 0.0f;

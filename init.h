@@ -33,7 +33,8 @@ void createCannon ();
 void createCannonGun();
 void createBullet();
 void createMirror();
-
+void shoot();
+void DrawBucket();
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
@@ -53,9 +54,15 @@ float rectangle_rotation = 0;
 vector<float> rectangle_translation_y;
 vector<float> rectangle_translation_x;
 vector<float> block_color;
+extern float rectangle_translation_incr;
+
 
 extern float red_bucket_translation_incr;
+extern float red_bucket_translation_x;
+extern float red_bucket_translation_y;
 extern float green_bucket_translation_incr;
+extern float green_bucket_translation_x;
+extern float green_bucket_translation_y;
 
 extern float CANNON_CORD_SPEED;
 extern float cannon_rotation_dir;
@@ -76,3 +83,10 @@ extern vector<int> BULLET_FLAG_2;
 
 extern int width;
 extern int height;
+
+double SHOOT_LAST = 0.0,SHOOT_CURRENT;
+extern float pan_x;
+extern float pan_y;
+
+extern double posx;
+extern double posy;
