@@ -191,6 +191,15 @@ void mouseButton (GLFWwindow* window, int button, int action, int mods)
                     posy = -posy*4.0/300.0;
                     green_bucket_translation_x = posx;
                 }
+                else if(abs(posx - CANNON_CORD_X) <= CANNON_RADIUS && abs(posy - CANNON_CORD_Y) <= CANNON_RADIUS )
+                {
+                    glfwGetCursorPos(window, &posx, &posy);
+                    posx -= 400;
+                    posy -= 300;
+                    posx = posx*4.0/400.0;
+                    posy = -posy*4.0/300.0;
+                    CANNON_CORD_Y = posy;
+                }
                 else
                 {
                     cannon_rotation = atan((posy-CANNON_CORD_Y)/(posx-CANNON_CORD_X))*180.0/M_PI;

@@ -70,6 +70,7 @@ extern float cannon_rotation_increment;
 extern float CANNON_CORD_X;
 extern float CANNON_CORD_Y;
 extern float cannon_rotation;
+extern float CANNON_RADIUS;
 
 extern vector<VAO *> BULLET;
 extern vector<VAO *> BULLET_REVERSE;
