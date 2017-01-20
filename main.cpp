@@ -502,7 +502,7 @@ int main (int argc, char** argv)
 
         /* FALLING BLOCK RENDERING CODE ENDS HERE */
     }
-    cout << "GAME OVER: " << GAME_SCORE << endl;
+    cout << "GAME SCORE: " << GAME_SCORE << endl;
     glfwTerminate();
     //    exit(EXIT_SUCCESS);
 }

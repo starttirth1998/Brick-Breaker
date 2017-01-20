@@ -136,6 +136,7 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 }
                 break;
             case GLFW_KEY_ESCAPE:
+                cout << "GAME SCORE: " << GAME_SCORE << endl;
                 quit(window);
                 break;
             default:
@@ -150,6 +151,7 @@ void keyboardChar (GLFWwindow* window, unsigned int key)
 	switch (key) {
 		case 'Q':
 		case 'q':
+            cout << "GAME SCORE: " << GAME_SCORE << endl;
             quit(window);
             break;
 		default:

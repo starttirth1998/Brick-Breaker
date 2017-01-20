@@ -95,3 +95,4 @@ extern double posx;
 extern double posy;
 
 extern int PAN_STATUS;
+extern long long GAME_SCORE;
