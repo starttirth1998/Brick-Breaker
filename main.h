@@ -139,3 +139,5 @@ float pan_y = 0.0f;
 
 double posx = 0.0f;
 double posy = 0.0f;
+
+int PAN_STATUS = 0;

@@ -463,6 +463,17 @@ int main (int argc, char** argv)
         if(GAME_FLAG == 1)
             break;
         // OpenGL Draw commands
+        glfwGetCursorPos(window, &posx, &posy);
+        posx -= 400;
+        posy -= 300;
+        posx = posx*4.0/400.0;
+        posy = -posy*4.0/300.0;
+        if(PAN_STATUS == 1 && zoom < 1.0f)
+        {
+            pan_x = posx;
+            pan_y = posy;
+        }
+        reshapeWindow(window,width,height);
         draw();
         // Swap Frame Buffer in double buffering
         glfwSwapBuffers(window);

@@ -93,3 +93,5 @@ extern float pan_y;
 
 extern double posx;
 extern double posy;
+
+extern int PAN_STATUS;

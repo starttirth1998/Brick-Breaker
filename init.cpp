@@ -113,8 +113,8 @@ void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods)
                 break;
             case GLFW_KEY_UP:
                 zoom -= 0.25f;
-                if (zoom < 0.f)
-                    zoom = 0.f;
+                if (zoom < 0.5f)
+                    zoom = 0.5f;
                 reshapeWindow(window,width,height);
                 break;
             case GLFW_KEY_DOWN:
@@ -192,8 +192,13 @@ void mouseButton (GLFWwindow* window, int button, int action, int mods)
                 break;
             }
             case GLFW_MOUSE_BUTTON_RIGHT:
-                    rectangle_rot_dir *= -1;
-                    break;
+            {
+                if(action == GLFW_PRESS)
+                    PAN_STATUS = 1;
+                if(action == GLFW_RELEASE)
+                    PAN_STATUS = 0;
+                break;
+            }
             default:
                 break;
     }
@@ -239,8 +244,8 @@ static void cursor_position_callback(GLFWwindow* window, double xpos, double ypo
 void scroll_callback(GLFWwindow* window, double x, double y)
 {
     zoom += (float) y / 4.0f;
-    if (zoom < 0)
-        zoom = 0;
+    if (zoom < 0.5f)
+        zoom = 0.5f;
     reshapeWindow(window,width,height);
 }
 
