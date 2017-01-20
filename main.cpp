@@ -69,7 +69,22 @@ void DrawCannon()
     Matrices.model *= (translateCannonGun*rotateCannonGun );
     MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(CANNON_GUN);    
+    draw3DObject(CANNON_GUN);
+
+
+    glfwGetCursorPos(window, &posx, &posy);
+    posx -= 400;
+    posy -= 300;
+    posx = posx*4.0/400.0;
+    posy = -posy*4.0/300.0;
+    /*if(CANNON_CORD_Y > UPPER_LIMIT - 1.0f)
+        posy = UPPER_LIMIT - 1.0f;
+    if(CANNON_CORD_Y < LOWER_LIMIT + 1.5f)
+        posy = LOWER_LIMIT + 1.5f;*/
+
+    if(CANNON_STATUS != 0)
+        CANNON_CORD_Y = posy;
+
     CANNON_CORD_Y = CANNON_CORD_Y + CANNON_CORD_SPEED;
     if(CANNON_CORD_Y > UPPER_LIMIT-1.0f || CANNON_CORD_Y < LOWER_LIMIT+1.5f)
         CANNON_CORD_Y = CANNON_CORD_Y - CANNON_CORD_SPEED;
@@ -89,6 +104,8 @@ void DrawBucket()
     //  Don't change unless you are sure!!
     glm::mat4 MVP;	// MVP = Projection * View * Model
 
+
+    
     /*------------------------------------ BUCKET CODE STARTS HERE ------------------------------------*/
 
   Matrices.model = glm::mat4(1.0f);
@@ -107,6 +124,21 @@ void DrawBucket()
   draw3DObject(bucket[1]);
 
   
+    glfwGetCursorPos(window, &posx, &posy);
+    posx -= 400;
+    posy -= 300;
+    posx = posx*4.0/400.0;
+    if(posx > RIGHT_LIMIT-0.8f)
+        posx = RIGHT_LIMIT-0.8f;
+    if(posx < LEFT_LIMIT+0.8f)
+        posx = LEFT_LIMIT+0.8f;
+    posy = -posy*4.0/300.0;
+
+    if(RED_STATUS == 1)
+        red_bucket_translation_x = posx;
+    if(GREEN_STATUS == 1)
+        green_bucket_translation_x = posx;
+
   red_bucket_translation_x = red_bucket_translation_x + red_bucket_translation_incr;
   if(red_bucket_translation_x < LEFT_LIMIT+0.8f || red_bucket_translation_x > RIGHT_LIMIT-0.8f)
     red_bucket_translation_x = red_bucket_translation_x - red_bucket_translation_incr;
@@ -415,7 +447,7 @@ void draw ()
 
 int main (int argc, char** argv)
 {
-    GLFWwindow* window = initGLFW(width, height);
+    window = initGLFW(width, height);
 
     for(int i=0;i<180;i++)
     {

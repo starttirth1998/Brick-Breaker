@@ -27,6 +27,7 @@ struct VAO {
 };
 typedef struct VAO VAO;
 
+GLFWwindow* window;
 void keyboard (GLFWwindow* window, int key, int scancode, int action, int mods);
 void keyboardChar (GLFWwindow* window, unsigned int key);
 void mouseButton (GLFWwindow* window, int button, int action, int mods);
@@ -79,7 +80,8 @@ float green_bucket_translation_y = -3.5f;
 float red_bucket_translation_incr = 0;
 float green_bucket_translation_incr = 0;
 float rectangle_translation_incr = 0.01;
-
+int RED_STATUS = 0;
+int GREEN_STATUS = 0;
 
 VAO *bucket_line;
 vector<VAO *> CANNON;
@@ -87,12 +89,12 @@ float CANNON_RADIUS = 0.50f;
 float CANNON_CORD_X = -4.05f;
 float CANNON_CORD_Y = 0.0f;
 VAO *CANNON_GUN;
+int CANNON_STATUS = 0;
 
 float CANNON_CORD_SPEED = 0.0f;
 float cannon_rotation = 0.0f;
 float cannon_rotation_increment = 0;
 float cannon_rotation_dir = 1;
-
 
 vector<VAO *> BULLET;
 vector<VAO *> BULLET_REVERSE;
@@ -117,7 +119,7 @@ float LEFT_LIMIT = -4.0f;
 long long GAME_SCORE = 0;
 int GAME_FLAG = 0;
 long long MISS = 0;
-long long MAX_MISS = 20;
+long long MAX_MISS = 200;
 
 GLfloat zoom = 1.0f;
 

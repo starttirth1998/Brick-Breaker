@@ -56,10 +56,11 @@ vector<float> rectangle_translation_x;
 vector<float> block_color;
 extern float rectangle_translation_incr;
 
-
+extern int RED_STATUS;
 extern float red_bucket_translation_incr;
 extern float red_bucket_translation_x;
 extern float red_bucket_translation_y;
+extern int GREEN_STATUS;
 extern float green_bucket_translation_incr;
 extern float green_bucket_translation_x;
 extern float green_bucket_translation_y;
@@ -71,6 +72,7 @@ extern float CANNON_CORD_X;
 extern float CANNON_CORD_Y;
 extern float cannon_rotation;
 extern float CANNON_RADIUS;
+extern float CANNON_STATUS;
 
 extern vector<VAO *> BULLET;
 extern vector<VAO *> BULLET_REVERSE;

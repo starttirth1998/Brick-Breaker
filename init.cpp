@@ -161,56 +161,41 @@ void keyboardChar (GLFWwindow* window, unsigned int key)
 void mouseButton (GLFWwindow* window, int button, int action, int mods)
 {
     switch (button) {
-        if (action == GLFW_RELEASE) {
-            case GLFW_MOUSE_BUTTON_RIGHT:
-                rectangle_rot_dir *= -1;
-                break;
-        }
-        if(action == GLFW_PRESS){
-            case GLFW_MOUSE_BUTTON_LEFT:
+        case GLFW_MOUSE_BUTTON_LEFT:
+            if(action == GLFW_PRESS){
                 glfwGetCursorPos(window, &posx, &posy);
                 posx -= 400;
                 posy -= 300;
                 posx = posx*4.0/400.0;
                 posy = -posy*4.0/300.0;
                 if(abs(posx - red_bucket_translation_x) <= 0.8 && abs(posy-red_bucket_translation_y) <= 0.35 )
-                {
-                    glfwGetCursorPos(window, &posx, &posy);
-                    posx -= 400;
-                    posy -= 300;
-                    posx = posx*4.0/400.0;
-                    posy = -posy*4.0/300.0;
-                    red_bucket_translation_x = posx;
-                }
+                    RED_STATUS = 1;
                 else if(abs(posx - green_bucket_translation_x) <= 0.8 && abs(posy-green_bucket_translation_y) <= 0.35 )
-                {
-                    glfwGetCursorPos(window, &posx, &posy);
-                    posx -= 400;
-                    posy -= 300;
-                    posx = posx*4.0/400.0;
-                    posy = -posy*4.0/300.0;
-                    green_bucket_translation_x = posx;
-                }
+                    GREEN_STATUS = 1;
                 else if(abs(posx - CANNON_CORD_X) <= CANNON_RADIUS && abs(posy - CANNON_CORD_Y) <= CANNON_RADIUS )
-                {
-                    glfwGetCursorPos(window, &posx, &posy);
-                    posx -= 400;
-                    posy -= 300;
-                    posx = posx*4.0/400.0;
-                    posy = -posy*4.0/300.0;
-                    CANNON_CORD_Y = posy;
-                }
+                    CANNON_STATUS = 1;
                 else
                 {
                     cannon_rotation = atan((posy-CANNON_CORD_Y)/(posx-CANNON_CORD_X))*180.0/M_PI;
                     shoot();
                 }
                 //cout << posx << " Y:" << posy << " ANGLE: " << cannon_rotation << endl;
-                
                 break;
-        }
-        default:
-            break;
+            }
+            if (action == GLFW_RELEASE){
+                if(abs(posx - red_bucket_translation_x) <= 0.8 && abs(posy-red_bucket_translation_y) <= 0.35 )
+                    RED_STATUS = 0;
+                if(abs(posx - green_bucket_translation_x) <= 0.8 && abs(posy-green_bucket_translation_y) <= 0.35 )
+                    GREEN_STATUS = 0;
+                if(abs(posx - CANNON_CORD_X) <= CANNON_RADIUS && abs(posy - CANNON_CORD_Y) <= CANNON_RADIUS )
+                    CANNON_STATUS = 0;
+                break;
+            }
+            case GLFW_MOUSE_BUTTON_RIGHT:
+                    rectangle_rot_dir *= -1;
+                    break;
+            default:
+                break;
     }
 }
 
