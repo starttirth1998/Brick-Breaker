@@ -329,7 +329,7 @@ void collision()
             {
                 if(block_color[j] == 3)
                 {
-                    BULLET_YCORD_SPEED[i] = (4*BULLET_YCORD_SPEED[i])/3 ;
+                    BULLET_YCORD_SPEED[i] = (1.4*BULLET_YCORD_SPEED[i]);
                     break;
                 }
                 else if(block_color[j] == 2)
