@@ -375,6 +375,7 @@ void outside_board()
             BULLET_CORD_Y[i] < LOWER_LIMIT || BULLET_CORD_Y[i] > UPPER_LIMIT)
         {
             GAME_SCORE = GAME_SCORE - 5;
+            cout << "SCORE: " << GAME_SCORE << endl;
             DELETE.push_back(i);
         }
     }
@@ -433,7 +434,7 @@ void mirror_reflect()
                 //BULLET_YCORD_Y[i] = BULLET_CORD_Y[i]*cos(90*M_PI/180.0f) - BULLET_CORD_Y[i]*sin(90*M_PI/180.0f); 
             }
         if( BULLET_FLAG_2[i] == 0 &&
-            BULLET_CORD_X[i] < 3.0f && BULLET_CORD_X[i] > 2.92f &&         
+            BULLET_CORD_X[i] < 3.08f && BULLET_CORD_X[i] > 2.92f &&         
             BULLET_CORD_Y[i] >= 2.42f-(MIRROR_LENGTH) &&
             BULLET_CORD_Y[i] <= 2.59f+(MIRROR_LENGTH) )
             {
