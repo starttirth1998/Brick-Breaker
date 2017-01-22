@@ -106,7 +106,7 @@ float bullet_rotation_increment = 20.0f;
 float bullet_rotation_dir = 1;
 vector<float> BULLET_XCORD_SPEED;
 vector<float> BULLET_YCORD_SPEED;
-float BULLET_SPEED = 0.09f;
+float BULLET_SPEED = 0.1f;
 vector<int> BULLET_FLAG_1;
 vector<int> BULLET_FLAG_2;
 
@@ -141,3 +141,6 @@ double posx = 0.0f;
 double posy = 0.0f;
 
 int PAN_STATUS = 0;
+
+VAO *STAR1;
+VAO *STAR1_REVERSE;

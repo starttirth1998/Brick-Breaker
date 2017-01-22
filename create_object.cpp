@@ -45,18 +45,30 @@ void createRectangle ()
     0,0,0  // color 1
   };
 
+  static const GLfloat color_buffer_data_blue [] = {
+    0,0,1, // color 1
+    0,0,1, // color 2
+    0,0,1, // color 3
+
+    0,0,1, // color 3
+    0,0,1, // color 4
+    0,0,1  // color 1
+  };
+
   // create3DObject creates and returns a handle to a VAO that can be used later
   //cout << "createRectangle" << BLOCKS.size() << endl;
   if(!BLOCKS.empty())
   {
     for(int i=0;i<BLOCKS.size();i++)
     {
-        if(block_color[i] == 0)
+        if(block_color[i] <= 0)
             BLOCKS[i] = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color_buffer_data_red, GL_FILL);
-        if(block_color[i] == 1)
+        else if(block_color[i] <= 1)
             BLOCKS[i] = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color_buffer_data_green, GL_FILL);
-        if(block_color[i] == 2)
+        else if(block_color[i] <= 2)
             BLOCKS[i] = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color_buffer_data_black, GL_FILL);
+        else if(block_color[i] <= 3)
+            BLOCKS[i] = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color_buffer_data_blue, GL_FILL);
         //cout << i << "forloop" << endl;
     }
   }

@@ -18,3 +18,4 @@ void createBullet();
 extern vector<VAO *> BULLET;
 extern vector<VAO *> BULLET_REVERSE;
 extern float BULLET_RADIUS;
+

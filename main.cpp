@@ -64,6 +64,12 @@ void DrawCannon()
         draw3DObject(CANNON[i]);
     }
 
+    glfwGetCursorPos(window, &posx, &posy);
+    posx -= 400;
+    posy -= 300;
+    posx = posx*4.0/400.0;
+    posy = -posy*4.0/300.0;
+
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translateCannonGun = glm::translate (glm::vec3(CANNON_CORD_X, CANNON_CORD_Y, 0));        // glTranslatef
     //glm::mat4 translateCannonGunToOrigin = glm::translate (glm::vec3(-CANNON_CENTER_X ,-CANNON_CENTER_Y, 0)); 
@@ -250,7 +256,9 @@ void score()
     for(int i=0;i<BLOCKS.size();i++)
     {      
         if(abs(rectangle_translation_x[i] - red_bucket_translation_x) < 0.875f && 
-            abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f)
+            abs(rectangle_translation_x[i] - green_bucket_translation_x) < 0.875f &&
+            rectangle_translation_y[i] - red_bucket_translation_y < 0.45f &&
+            rectangle_translation_y[i] - red_bucket_translation_y > 0.40f)
             {
                 if(block_color[i] == 2)
                     GAME_FLAG = 1;
@@ -261,7 +269,10 @@ void score()
                 rectangle_translation_y[i] - red_bucket_translation_y > 0.40f)
         {
             if(block_color[i] == 0 )
+            {
                 GAME_SCORE = GAME_SCORE + 10;
+                cout << "Score: " << GAME_SCORE << endl;
+            }
             if(block_color[i] == 2)
                 GAME_FLAG = 1;            
             DELETE.push_back(i);
@@ -271,13 +282,14 @@ void score()
                 rectangle_translation_y[i] - green_bucket_translation_y > 0.40f)
         {
             if(block_color[i] == 1)
+            {
                 GAME_SCORE = GAME_SCORE + 10;
+                cout << "Score: " << GAME_SCORE << endl;
+            }
             if(block_color[i] == 2)
                 GAME_FLAG = 1;            
             DELETE.push_back(i);
-        }
-        //cout << GAME_SCORE << endl;
-        
+        }        
     }
     for(int i=0;i<DELETE.size();i++)
     {
@@ -299,12 +311,21 @@ void collision()
             if(abs(BULLET_CORD_X[i] - rectangle_translation_x[j]) < 2*BULLET_RADIUS+0.04f 
             && abs(BULLET_CORD_Y[i] - rectangle_translation_y[j]) < 2*BULLET_RADIUS+0.04f)
             {
-                if(block_color[j] == 2)
+                if(block_color[j] == 3)
+                {
+                    BULLET_YCORD_SPEED[i] = (4*BULLET_YCORD_SPEED[i])/3 ;
+                    break;
+                }
+                else if(block_color[j] == 2)
+                {
                     GAME_SCORE = GAME_SCORE + 10;
+                    cout << "Score: " << GAME_SCORE << endl;
+                }
                 else
                 {
-                    MISS++;
-                    if(MISS >= MAX_MISS)
+                    MAX_MISS--;
+                    printf("Remaining Misses: %lld\n",MAX_MISS);
+                    if(MAX_MISS <= 0)
                         GAME_FLAG = 1;
                 }
                 DELETE.push_back({i,j});
@@ -398,7 +419,7 @@ void mirror_reflect()
         if( BULLET_FLAG_2[i] == 0 &&
             BULLET_CORD_X[i] < 3.0f && BULLET_CORD_X[i] > 2.92f &&         
             BULLET_CORD_Y[i] >= 2.42f-(MIRROR_LENGTH) &&
-            BULLET_CORD_Y[i] <= 2.58f+(MIRROR_LENGTH) )
+            BULLET_CORD_Y[i] <= 2.59f+(MIRROR_LENGTH) )
             {
                 BULLET_FLAG_2[i] = 1;
                 BULLET_FLAG_1[i] = 0;
@@ -458,7 +479,7 @@ int main (int argc, char** argv)
         return 0; 
     }
 
-    engine->play2D("irrKlang-64bit-1.5.0/media/MF-3DAYS.S3M", true);
+    engine->play2D("irrKlang-64bit-1.5.0/media/MF-W-90.XM", true);
 
     window = initGLFW(width, height);
 
@@ -506,7 +527,7 @@ int main (int argc, char** argv)
             float temp_x = -2.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/6.0f));
             rectangle_translation_x.push_back(temp_x);
             rectangle_translation_y.push_back(temp_y);
-            block_color.push_back(rand()%3);
+            block_color.push_back(rand()%4);
             //rectangle_translation_y[rectangle_translation_y.size()-1] = 4.0f;
             createRectangle();
             //cout << BLOCKS.size()-1 << endl;

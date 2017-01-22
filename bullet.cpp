@@ -28,7 +28,6 @@ void createBullet ()
       0,0,1  // color 1
     };
 
-      // create3DObject creates and returns a handle to a VAO that can be used later
   for(int i=0;i<BULLET.size();i++)
   {
     BULLET[i] = create3DObject(GL_TRIANGLES, 3, bullet_data, bullet_color, GL_FILL); 
