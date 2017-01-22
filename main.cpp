@@ -458,7 +458,7 @@ int main (int argc, char** argv)
         return 0; 
     }
 
-    engine->play2D("irrKlang-64bit-1.5.0/media/MF-3DAYS.S3M", false);
+    engine->play2D("irrKlang-64bit-1.5.0/media/MF-3DAYS.S3M", true);
 
     window = initGLFW(width, height);
 
