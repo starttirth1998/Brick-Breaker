@@ -44,7 +44,7 @@ struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloa
 struct VAO* create3DObject (GLenum primitive_mode, int numVertices, const GLfloat* vertex_buffer_data, const GLfloat red, const GLfloat green, const GLfloat blue, GLenum fill_mode);
 void draw3DObject (struct VAO* vao);
 
-
+void createBackground();
 void createRectangle ();
 void createBullet ();
 void collision ();
@@ -56,6 +56,7 @@ void DrawBlocks();
 void DrawBucket();
 void DrawCannon();
 void DrawBullet();
+void DrawBackground();
 
 vector<struct VAO *> BLOCKS;
 
@@ -142,5 +143,5 @@ double posy = 0.0f;
 
 int PAN_STATUS = 0;
 
-VAO *STAR1;
-VAO *STAR1_REVERSE;
+VAO *background;
+VAO *background1;

@@ -220,6 +220,22 @@ void DrawMirror()
     }
 }
 
+void DrawBackground()
+{
+    createBackground();
+     glm::mat4 VP = Matrices.projection * Matrices.view;
+
+    glm::mat4 MVP;
+
+    Matrices.model = glm::mat4(1.0f);
+    glm::mat4 translateBackground = glm::translate (glm::vec3(0, 0, 0.0));        // glTranslatef
+    //glm::mat4 rotateRectangle = glm::rotate((float)(rectangle_rotation*M_PI/180.0f), glm::vec3(0,0,1)); // rotate about vector (-1,1,1)
+    Matrices.model *= (translateBackground);
+    MVP = VP * Matrices.model;
+    glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(background);
+}
+
 void DrawBlocks()
 {
      glm::mat4 VP = Matrices.projection * Matrices.view;
@@ -462,6 +478,7 @@ void draw ()
   outside_board();
   mirror_reflect();
 
+  DrawBackground();
   DrawBlocks();
   DrawBucket();
   DrawCannon();

@@ -343,7 +343,7 @@ void initGL (GLFWwindow* window, int width, int height)
 	reshapeWindow (window, width, height);
 
     // Background color of the scene
-	glClearColor (0.8f, 0.8f, 0.2f, 0.0f); // R, G, B, A
+	glClearColor (0.6f, 0.6f, 1.0f, 0.0f); // R, G, B, A
 	glClearDepth (1.0f);
 
 	glEnable (GL_DEPTH_TEST);
