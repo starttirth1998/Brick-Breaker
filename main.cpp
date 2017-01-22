@@ -1,5 +1,8 @@
 #include "header.h"
 #include "main.h"
+#include <irrKlang.h>
+
+using namespace irrklang;
 
 extern struct GLMatrices Matrices;
 extern GLuint programID;
@@ -447,6 +450,16 @@ void draw ()
 
 int main (int argc, char** argv)
 {
+    ISoundEngine* engine = createIrrKlangDevice();
+
+    if (!engine)
+    {
+        printf("Could not startup engine\n");
+        return 0; 
+    }
+
+    engine->play2D("irrKlang-64bit-1.5.0/media/MF-3DAYS.S3M", false);
+
     window = initGLFW(width, height);
 
     for(int i=0;i<180;i++)
@@ -502,6 +515,7 @@ int main (int argc, char** argv)
 
         /* FALLING BLOCK RENDERING CODE ENDS HERE */
     }
+    engine->drop();
     cout << "GAME SCORE: " << GAME_SCORE << endl;
     glfwTerminate();
     //    exit(EXIT_SUCCESS);

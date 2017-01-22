@@ -1,14 +1,27 @@
 #include "header.h"
 #include "init.h"
+#include <irrKlang.h>
+
+using namespace irrklang;
 
 /* Executed when a regular key is pressed/released/held-down */
 /* Prefered for Keyboard events */
 
 void shoot()
-{
+{  
     SHOOT_CURRENT = glfwGetTime();
     if((SHOOT_CURRENT - SHOOT_LAST) >= 1.0)
     {
+        ISoundEngine* engine = createIrrKlangDevice();
+
+        if (!engine)
+        {
+            printf("Could not startup engine\n");
+            //return 0; // error starting up the engine
+        }
+
+        engine->play2D("irrKlang-64bit-1.5.0/media/explosion.wav", false);
+
         SHOOT_LAST = SHOOT_CURRENT;
         BULLET.push_back(new VAO());
         BULLET_REVERSE.push_back(new VAO());
